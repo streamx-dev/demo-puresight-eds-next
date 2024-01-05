@@ -1,1 +1,5 @@
 /* footer block styles */
+
+.footer .content p:last-child {
+  padding-top: 1.13rem;
+}
