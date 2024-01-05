@@ -9,9 +9,6 @@ export default async function decorate(block) {
 
   const [logoWrapper, menuItemsWrapper, seachWrapper] = fragment.querySelectorAll(':scope > div');
 
-  // eslint-disable-next-line
-  debugger;
-
   const logoLink = logoWrapper.querySelector('a').href;
   const logoImg = logoWrapper.querySelector('img').src;
   const menuItmes = menuItemsWrapper.querySelectorAll('li');
