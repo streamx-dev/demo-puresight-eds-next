@@ -3,7 +3,7 @@ export default function decorate(block) {
   const text = block.querySelector('p');
 
   const newsletterFormFragment = document.createRange().createContextualFragment(`
-    <section class="hero  is-small is-primary ">
+    <div class="hero  is-small is-primary ">
       <div class="hero-body">
         <div class="container  newsletter">
           <div class="columns is-tablet">
@@ -36,7 +36,7 @@ export default function decorate(block) {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   `);
 
   block.innerHTML = '';
