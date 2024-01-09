@@ -13,6 +13,7 @@ import {
 } from './aem.js';
 
 import '../libs/kyanite/main.js';
+import '../libs/kyanite/main.published.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
