@@ -49,8 +49,6 @@ const customDecorateIcons = (element) => {
       decorateIcons(icon);
     }
   });
-
-  // decorateIcons();
 };
 
 /**

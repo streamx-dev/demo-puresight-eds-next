@@ -35,6 +35,7 @@ export default function decorate(block) {
     ctaButton.parentElement.remove();
     ctaButton.classList.add('is-normal', currentTheme.button);
 
+    // wrapping text nodes with span
     [...ctaButton.childNodes]
       .filter((el) => el.nodeType === Node.TEXT_NODE && el.textContent.trim())
       .forEach((el) => {
