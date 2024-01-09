@@ -29,6 +29,28 @@ async function loadFonts() {
   }
 }
 
+const customDecorateIcons = (element) => {
+  const iconsList = element.querySelectorAll('span.icon');
+  const svgIcons = [];
+
+  iconsList.forEach((icon) => {
+    const mdiClass = [...icon.classList].find((el) => el.startsWith('icon-mdi-'));
+    if (mdiClass) {
+      const iconName = mdiClass.split('icon-')[1];
+      const iconFragment = document.createRange().createContextualFragment(`
+        <span class="icon">
+          <i class="mdi ${iconName}" aria-hidden="false"></i>
+        </span>
+      `);
+
+      icon.replaceWith(iconFragment);
+    } else {
+      svgIcons.push(svgIcons);
+      decorateIcons(icon);
+    }
+  });
+};
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -37,7 +59,7 @@ async function loadFonts() {
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
   decorateButtons(main);
-  decorateIcons(main);
+  customDecorateIcons(main);
   decorateSections(main);
   decorateBlocks(main);
 }

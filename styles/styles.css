@@ -39,3 +39,7 @@ h5 {
 h6 {
   font-size: 1rem
 }
+
+.section.hero-container {
+  padding: 0;
+}
