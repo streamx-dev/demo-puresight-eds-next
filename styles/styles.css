@@ -40,6 +40,7 @@ h6 {
   font-size: 1rem
 }
 
-.section.hero-container {
+.section.hero-container,
+.section.newsletter-form-container {
   padding: 0;
 }
