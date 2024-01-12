@@ -12,8 +12,15 @@ import {
   loadCSS,
 } from './aem.js';
 
-import '../libs/kyanite/main.js';
-import '../libs/kyanite/main.published.js';
+const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
+const loadDependenciesLibs = async () => {
+  window.KYANITE_ON_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
+  window.KYANITE_ON_DOM_CONTENT_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
+
+  // dynamic import because the KYANITE_ON_LOAD_CUSTOM_EVENT must be set first
+  await import('../libs/kyanite/main.published.js');
+  await import('../libs/kyanite/main.js');
+};
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
@@ -95,13 +102,18 @@ async function loadEager(doc) {
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
   await loadBlocks(main);
+  await loadDependenciesLibs();
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  await loadHeader(doc.querySelector('header'));
+  await loadFooter(doc.querySelector('footer'));
+
+  // dispatching event for window 'load' and document 'DOMContentLoaded`
+  window.dispatchEvent(new CustomEvent(PURESIGHT_DEMO_LOAD_EVENT));
+  document.dispatchEvent(new CustomEvent(PURESIGHT_DEMO_LOAD_EVENT));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
