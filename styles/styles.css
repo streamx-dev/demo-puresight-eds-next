@@ -40,11 +40,6 @@ h6 {
   font-size: 1rem
 }
 
-.section.hero-container,
-.section.newsletter-form-container {
-  padding: 0;
-}
-
 body {
   /* Fix for now - can be removed when the body padding-top will be fixed in dxp-demo-cms */
 
@@ -54,4 +49,15 @@ body {
 /* Cumulative Layout Shift Improvments */
 header {
   height: 71px;
+}
+
+.section {
+  max-width: 84pc;
+  margin: auto;
+}
+
+.section.hero-container,
+.section.newsletter-form-container {
+  padding: 0;
+  max-width: 100%;
 }

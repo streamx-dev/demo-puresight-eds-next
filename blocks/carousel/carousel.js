@@ -41,10 +41,12 @@ const createCard = ({
 };
 
 export default async function decorate(block) {
+  const carouselSourceLink = block.textContent.trim();
+
   let carouselData;
 
   try {
-    carouselData = await (await fetch('/data/carousel.json')).json();
+    carouselData = await (await fetch(carouselSourceLink)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
