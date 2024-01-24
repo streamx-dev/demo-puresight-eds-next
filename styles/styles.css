@@ -57,7 +57,8 @@ header {
 }
 
 .section.hero-container,
-.section.newsletter-form-container {
+.section.newsletter-form-container,
+.section.promo-banner-container {
   padding: 0;
   max-width: 100%;
 }
