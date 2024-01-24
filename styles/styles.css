@@ -61,3 +61,7 @@ header {
   padding: 0;
   max-width: 100%;
 }
+
+.card-content .rating {
+  display: flex;
+}

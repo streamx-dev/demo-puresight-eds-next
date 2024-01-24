@@ -1,44 +1,4 @@
-const createCard = ({
-  img, text, rating, price, link,
-}, index) => {
-  const ratingIconFull = '<i class="mdi mdi-star" aria-hidden="true"></i>';
-  const ratingIconEmpty = '<i class="mdi mdi-star-outline" aria-hidden="true"></i>';
-  const ratingHTML = document.createRange().createContextualFragment(`
-    <div class="rating">
-      ${ratingIconFull.repeat(rating)}
-      ${ratingIconEmpty.repeat(5 - rating)}
-    </div>
-  `);
-
-  const cardFragmet = document.createRange().createContextualFragment(`
-    <div class="card">
-      <div class="card-image">
-        <figure class="image is-3by4">
-            <img src="${img}" loading="${index < 2 ? 'eager' : 'lazy'}">
-        </figure>
-      </div>
-      <div class="card-content">
-        <div class="container">
-            <div class="content is-medium  has-text-grey-700">
-              <p>${text}</p>
-            </div>
-            ${ratingHTML.children[0].outerHTML}
-            <div class="content is-medium  has-text-primary-700">
-              <p>${price}</p>
-            </div>
-            <a href="${link}" class="button is-normal is-dark">
-            <span>Buy Now</span>
-            <span class="icon">
-            <i class="mdi mdi-24px mdi-cart-outline" aria-hidden="false"></i>
-            </span>
-            </a>
-        </div>
-      </div>
-    </div>
-  `);
-
-  return cardFragmet.children[0];
-};
+import createCard from '../../components/card/card.js';
 
 export default async function decorate(block) {
   const carouselSourceLink = block.textContent.trim();
@@ -57,7 +17,7 @@ export default async function decorate(block) {
   const carouselItems = carouselData.map((data, index) => {
     const carouselListItemFragment = document.createRange().createContextualFragment(`
       <li class="glide__slide--active" style="width: 560px; margin-right: 16px;">
-        ${createCard(data, index).outerHTML}
+        ${createCard({ ...data, buttonText: 'Buy now' }, index).outerHTML}
       </li>
     `);
 
