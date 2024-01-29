@@ -30,6 +30,7 @@ export default function decorate(block) {
 
   image.parentElement.remove();
   image.classList.add('image', 'is-square');
+  image.querySelector('img').setAttribute('fetchpriority', 'high');
 
   if (ctaButton) {
     ctaButton.parentElement.remove();
