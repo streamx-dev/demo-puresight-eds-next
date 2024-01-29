@@ -108,6 +108,6 @@ main > .section > * {
 }
 
 /* Cumulative Layout Shift Improvments */
-.header {
+header {
   height: 111px;
 }
