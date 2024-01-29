@@ -17,27 +17,27 @@
 @import url("../libs/puresight/main.css");
 
 h1 {
-  font-size: 3rem
+  font-size: 3rem;
 }
 
 h2 {
-  font-size: 2.5rem
+  font-size: 2.5rem;
 }
 
 h3 {
-  font-size: 2rem
+  font-size: 2rem;
 }
 
 h4 {
-  font-size: 1.5rem
+  font-size: 1.5rem;
 }
 
 h5 {
-  font-size: 1.25rem
+  font-size: 1.25rem;
 }
 
 h6 {
-  font-size: 1rem
+  font-size: 1rem;
 }
 
 body {
@@ -46,23 +46,68 @@ body {
   padding: 0 !important;
 }
 
-/* Cumulative Layout Shift Improvments */
-header {
-  height: 71px;
+main > .section {
+  max-width: 100%;
+  padding: 32px 24px;
 }
 
-.section {
-  max-width: 84pc;
+@media screen and (width >= 768px) {
+  main > .section {
+    padding: 40px 24px;
+  }
+}
+
+@media screen and (width >= 768px) {
+  main > .section {
+    padding: 64px 48px;
+  }
+}
+
+main > .section > * {
+  max-width: 60pc;
   margin: auto;
+}
+
+@media screen and (width >= 1024px) {
+  main > .section > * {
+    max-width: 60pc;
+  }
+}
+
+@media screen and (width >= 1216px) {
+  main > .section > * {
+    max-width: 72pc;
+  }
+}
+
+@media screen and (width >= 1408px) {
+  main > .section > * {
+    max-width: 84pc;
+  }
 }
 
 .section.hero-container,
 .section.newsletter-form-container,
 .section.promo-banner-container {
   padding: 0;
+}
+
+.section .hero-wrapper,
+.section .newsletter-form-wrapper,
+.section .promo-banner-wrapper {
   max-width: 100%;
+  padding: 0;
+}
+
+.section .default-content-wrapper .title {
+  margin-bottom: 1.5rem;
 }
 
 .card-content .rating {
   display: flex;
+}
+
+/* Cumulative Layout Shift Improvments */
+.header {
+  height: 111px;
 }

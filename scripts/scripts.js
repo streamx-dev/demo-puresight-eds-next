@@ -58,6 +58,16 @@ const customDecorateIcons = (element) => {
   });
 };
 
+const handleDefaultContent = (main) => {
+  const defaultContentElements = [...main.querySelectorAll('.default-content-wrapper')];
+
+  defaultContentElements.forEach((dc) => {
+    [...dc.querySelectorAll('h1, h2, h3, h4, h5, h6')].forEach((heading) => {
+      heading.classList.add('title', `is-${heading.tagName.substring(1)}`, 'has-text-grey-900');
+    });
+  });
+};
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -69,6 +79,7 @@ export function decorateMain(main) {
   customDecorateIcons(main);
   decorateSections(main);
   decorateBlocks(main);
+  handleDefaultContent(main);
 }
 
 /**

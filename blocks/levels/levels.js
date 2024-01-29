@@ -33,11 +33,9 @@ export default async function decorate(block) {
   });
 
   const promoBannerFragment = document.createRange().createContextualFragment(`
-    <div class="section is-normal">
-      <div class="container">
-        <div class="level level-with-gaps is-align-items-center">
-          ${levelsData.map((level) => renderLevel(level).outerHTML).join('')}
-        </div>
+    <div class="container">
+      <div class="level level-with-gaps is-align-items-center">
+        ${levelsData.map((level) => renderLevel(level).outerHTML).join('')}
       </div>
     </div>
   `);
