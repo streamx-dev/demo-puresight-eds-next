@@ -30,6 +30,7 @@ export default function decorate(block) {
 
   image.parentElement.remove();
   image.classList.add('image', 'is-square');
+  image.querySelector('img').setAttribute('fetchpriority', 'high');
 
   if (ctaButton) {
     ctaButton.parentElement.remove();
@@ -56,24 +57,22 @@ export default function decorate(block) {
   `);
 
   const heroFragment = document.createRange().createContextualFragment(`
-    <div class="${currentTheme.block} is-small has-side-image">
-      <div class="hero-body">
-        <div class="container  ">
-          <div class="columns is-multiline is-tablet">
-            <div class="column is-6-desktop is-12-mobile ">
-              <section class="section is-normal">
-                <h3 class="title is-3 ${currentTheme.heading}">
-                  <span>${heading.innerHTML}</span>
-                </h3>
-                ${descriptionFragment.children[0].outerHTML}
-                ${ctaButton.outerHTML}
-              </section>
-            </div>
-            <div class="column ">
-              <a class="">
-                ${image.outerHTML}
-              </a>
-            </div>
+    <div class="hero-body">
+      <div class="container  ">
+        <div class="columns is-multiline is-tablet">
+          <div class="column is-6-desktop is-12-mobile ">
+            <section class="section is-normal">
+              <h3 class="title is-3 ${currentTheme.heading}">
+                <span>${heading.innerHTML}</span>
+              </h3>
+              ${descriptionFragment.children[0].outerHTML}
+              ${ctaButton.outerHTML}
+            </section>
+          </div>
+          <div class="column ">
+            <a class="">
+              ${image.outerHTML}
+            </a>
           </div>
         </div>
       </div>
@@ -82,4 +81,8 @@ export default function decorate(block) {
 
   block.innerHTML = '';
   block.append(heroFragment.children[0]);
+
+  if (themeName === 'teak') {
+    block.classList.add('is-small');
+  }
 }

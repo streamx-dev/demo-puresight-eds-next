@@ -1,3 +1,26 @@
 .block.hero picture {
   display: flex;
 }
+
+.block.hero .content {
+  padding-bottom: 20px;
+}
+
+@media(width >= 768px) {
+  .block.hero .content {
+    padding-bottom: 24px;
+  }
+}
+
+@media(width >= 768px) {
+  .block.hero .content {
+    padding-bottom: 24px;
+  }
+}
+
+
+@media(width >= 768px) {
+  .block.hero .content {
+    padding-bottom: 40px;
+  }
+}

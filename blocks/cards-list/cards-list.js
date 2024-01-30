@@ -2,7 +2,7 @@ import createCard from '../../components/card/card.js';
 
 const renderColumn = (columnCellsData) => {
   const columFragment = document.createRange().createContextualFragment(`
-    <div class="column">
+    <div class="column product-tiles">
       ${columnCellsData.map((cell) => createCard(cell).outerHTML).join('')}
     </div>
   `);

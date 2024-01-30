@@ -25,7 +25,7 @@ export default async function decorate(block) {
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="container is-widescreen">
         <div class="navbar-brand">
-          <a class="navbar-item" href="${logoLink}">
+          <a class="navbar-item" href="${logoLink}" alt="PureSight">
             <img
               src="${logoImg}"
             />
@@ -58,5 +58,5 @@ export default async function decorate(block) {
     </nav>
   `);
 
-  block.innerHTML = headerFragment.children[0].outerHTML;
+  block.replaceWith(headerFragment.children[0]);
 }
