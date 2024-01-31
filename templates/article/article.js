@@ -1,9 +1,9 @@
 import { createOptimizedPicture, getMetadata } from '../../scripts/aem.js';
 import { getTextLabel } from '../../scripts/commons.js';
 
-const renderGoToAllBlockArticles = () => {
+const renderGoToAllBlockArticles = (allPostsLink) => {
   const goToAllBlockArticlesFragment = document.createRange().createContextualFragment(`
-    <a href="/content/puresight/pages/blog.html" class="blog-back-button">
+    <a href="${allPostsLink}" class="blog-back-button">
       <span class="mdi mdi-arrow-left"></span>
       <span>${getTextLabel('All blog articles')}</span>
     </a>
@@ -141,6 +141,7 @@ const buildArticle = (main) => {
   const date = getMetadata('date');
   const readTime = getMetadata('read-time');
   const avatarSource = getMetadata('avatar');
+  const allPostsLink = getMetadata('all-posts-link');
 
   const avatarImg = createOptimizedPicture(avatarSource, author, false, [{ width: '192' }]);
   const avatarLink = avatarImg.querySelector('img').src;
@@ -169,7 +170,7 @@ const buildArticle = (main) => {
       <div class="container  ">
         <div class="columns is-multiline is-desktop">
             <div class="column is-2-desktop sticky-container">
-              ${renderGoToAllBlockArticles()}
+              ${renderGoToAllBlockArticles(allPostsLink)}
             </div>
             <div class="column is-8-desktop ">
               ${renderArticleHeader(headingData)}
