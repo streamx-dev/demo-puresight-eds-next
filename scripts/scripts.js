@@ -12,6 +12,7 @@ import {
   loadCSS,
   getMetadata,
 } from './aem.js';
+import { loadTemplate } from './commons.js';
 
 const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
 const loadDependenciesLibs = async () => {
@@ -21,31 +22,6 @@ const loadDependenciesLibs = async () => {
   // dynamic import because the KYANITE_ON_LOAD_CUSTOM_EVENT must be set first
   await import('../libs/kyanite/main.published.js');
   await import('../libs/kyanite/main.js');
-};
-
-const loadTemplate = async (doc, templateName) => {
-  try {
-    const cssLoaded = loadCSS(`${window.hlx.codeBasePath}/templates/${templateName}/${templateName}.css`);
-    const decorationComplete = new Promise((resolve) => {
-      (async () => {
-        try {
-          const mod = await import(`../templates/${templateName}/${templateName}.js`);
-          if (mod.default) {
-            await mod.default(doc);
-          }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log(`failed to load module for ${templateName}`, error);
-        }
-        resolve();
-      })();
-    });
-
-    await Promise.all([cssLoaded, decorationComplete]);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(`failed to load block ${templateName}`, error);
-  }
 };
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list

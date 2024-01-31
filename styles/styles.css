@@ -16,6 +16,10 @@
 @import url("../libs/kyanite/main.published.css");
 @import url("../libs/puresight/main.css");
 
+:root{
+  --nav-height: 111px;
+}
+
 h1 {
   font-size: 3rem;
 }
@@ -109,5 +113,5 @@ main > .section > * {
 
 /* Cumulative Layout Shift Improvments */
 header {
-  height: 111px;
+  height: var(--nav-height);
 }

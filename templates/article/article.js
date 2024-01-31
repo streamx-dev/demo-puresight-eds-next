@@ -1,10 +1,11 @@
 import { createOptimizedPicture, getMetadata } from '../../scripts/aem.js';
+import { getTextLabel } from '../../scripts/commons.js';
 
 const renderGoToAllBlockArticles = () => {
   const goToAllBlockArticlesFragment = document.createRange().createContextualFragment(`
     <a href="/content/puresight/pages/blog.html" class="blog-back-button">
       <span class="mdi mdi-arrow-left"></span>
-      <span>All blog articles</span>
+      <span>${getTextLabel('All blog articles')}</span>
     </a>
   `);
 
@@ -48,11 +49,11 @@ const renderArticleHeader = ({
 const renderTableOfContents = (headings) => {
   const tableOfContents = document.createRange().createContextualFragment(`
     <div class="blog-table-of-content">
-      <label class="table-label">Table of contents</label>
+      <label class="table-label">${getTextLabel('Table of contents')}</label>
       <ul class="table-content-list">
         ${headings.map((h) => `
           <li class="button is-ghost table-content-list__item--h5">
-            <a class="" href="#${h.id}">
+            <a href="#${h.id}">
               ${h.textContent}
             </a>
           </li>
@@ -61,7 +62,7 @@ const renderTableOfContents = (headings) => {
       <a class="table-content-button" href="#">
         <span class="table-content-button__label">
           <span class="mdi mdi-arrow-up"></span>
-          <span>Back to top</span>
+          <span>${getTextLabel('Back to top')}</span>
         </span>
       </a>
     </div>
@@ -103,7 +104,37 @@ const renderAuthorBio = ({
   return authorBio.children[0].innerHTML;
 };
 
-const buildArticle = (main, doc) => {
+const renderArticleContent = (articleContent) => {
+  const defaultContentEls = [...articleContent.querySelectorAll('.section .default-content-wrapper')];
+
+  defaultContentEls.forEach((el) => {
+    [...el.querySelectorAll('p')].forEach((paragraph) => {
+      const paragraphWrapper = document.createElement('div');
+      paragraphWrapper.classList.add('content', 'is-medium', 'has-text-grey-700');
+
+      paragraph.replaceWith(paragraphWrapper);
+      paragraphWrapper.append(paragraph);
+    });
+
+    [...el.querySelectorAll('h1, h2, h3, h4, h5, h6')].forEach((heading) => {
+      heading.classList.remove('has-text-grey-900');
+    });
+  });
+
+  const sectionsContent = [...articleContent.querySelectorAll('.section')]
+    .flatMap((section) => [...section.children])
+    .map((el) => el.innerHTML).join('');
+
+  const authorBio = document.createRange().createContextualFragment(`
+    <template>
+      ${sectionsContent}
+    </template>
+  `);
+
+  return authorBio.children[0].innerHTML;
+};
+
+const buildArticle = (main) => {
   const author = getMetadata('author');
   const authorDescription = getMetadata('author-description');
   const position = getMetadata('position');
@@ -118,14 +149,20 @@ const buildArticle = (main, doc) => {
   };
 
   // first heading is the article heading
-  const headingText = main.querySelector('h1, h2, h3, h4, h5, h6')?.textContent;
+  const firstHeading = main.querySelector('h1, h2, h3, h4, h5, h6');
+  const headingText = firstHeading?.textContent;
+  firstHeading.remove();
+
   const image = main.querySelector('picture');
   const headingData = {
     headingText, avatarLink, author, date, readTime, image,
   };
 
-  // skipping the first heading - it is the article heading
-  const tableOfContentsHeaders = [...main.querySelectorAll('h1, h2, h3, h4, h5, h6')].slice(1);
+  if (image.parentElement.tagName === 'P') {
+    image.parentElement.remove();
+  }
+
+  const tableOfContentsHeaders = [...main.querySelectorAll('h1, h2, h3, h4, h5, h6')];
 
   const articleFragment = document.createRange().createContextualFragment(`
     <section class="section ">
@@ -141,45 +178,7 @@ const buildArticle = (main, doc) => {
               ${renderTableOfContents(tableOfContentsHeaders)}
             </div>
             <div class="column is-8-desktop is-offset-2-desktop ">
-              <div class="content is-medium  has-text-grey-700">
-                  <p>In an ever-changing world, where life's pace often feels like a frenzied sprint, the minimalism movement has gained momentum. This trend towards simplifying life, both physically and mentally, has found its place in the hearts and homes of many. Join me on a journey to discover the art of decluttering and how it can transform your living spaces into havens of peace and serenity.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  The Minimalism Movement
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>Minimalism, as a lifestyle, is not a new concept. It has its roots in various philosophies and cultures throughout history, emphasizing the value of living with less. From ancient Eastern practices of Zen Buddhism to the mid-20th-century architectural marvels of the Bauhaus movement, minimalism has continually shaped our understanding of space and design.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  Creating Space
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>To embark on a decluttering journey, start with a clear vision. Consider what truly matters to you and what you want your space to reflect. Begin with the basics: sorting through possessions and letting go of items that no longer serve a purpose. The "less is more" mantra becomes your guiding principle as you free your living area from excess.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  Mindful Organization
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>Organizing your space efficiently is the next step towards achieving a clutter-free environment. Invest in practical storage solutions that maximize your available space. Under-bed storage, floating shelves, and multifunctional furniture pieces are great additions to your arsenal. Keep in mind that every item should have its designated place, reducing the chances of clutter creeping back in.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  Room by Room
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>Decluttering can feel overwhelming, so tackle one room at a time. Start with areas that are often the most cluttered, like the kitchen or home office. In the kitchen, clear countertops of unused appliances and utensils, creating an open, inviting space for meal preparation. In your home office, digitalize documents to eliminate paper clutter. As you move through your home, make conscious decisions about each item's importance and utility.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  Sustainable Solutions
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>Minimalism is not just about reducing physical clutter; it also champions sustainability. Consider donating or recycling items instead of sending them to the landfill. Seek out eco-friendly cleaning products to maintain your fresh, minimalist space. Sustainable living is an integral part of the minimalist lifestyle.</p>
-              </div>
-              <h5 id="movement" class="title is-5 ">
-                  Reflective Summary
-              </h5>
-              <div class="content is-medium  has-text-grey-700">
-                  <p>Decluttering your home is a journey that goes beyond simply tidying up. It's about cultivating a space that reflects your values and priorities. Embrace minimalism as a lifestyle, and you'll discover the benefits of reduced stress, increased focus, and a deeper connection to the things that truly matter. Remember, decluttering is not a one-time task; it's an ongoing practice. Regularly assess your living spaces and continue to edit your possessions. By doing so, you'll ensure that your home remains a sanctuary of simplicity in a complex world.</p>
-              </div>
+              ${renderArticleContent(main)}
               <div class="container blog-article-author-bio">
                 ${renderAuthorBio(authorBio)}
               </div>
