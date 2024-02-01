@@ -1,22 +1,22 @@
 const rednerArticle = ({
-  imgLink, img, heading, description, metadata, link,
+  imgLink, img, heading, description, link, author, date, readTime,
 }) => {
   const articleFragment = document.createRange().createContextualFragment(`
     <div class="column">
       <div class="container  ">
         <a href="${imgLink}" class="">
-            <figure class="image is-2by3 ">
-              <img src="${img}">
-            </figure>
+          <figure class="image is-2by3 ">
+            <img src="${img}">
+          </figure>
         </a>
         <div class="content is-medium  has-text-grey-700">
-            <p><strong>${heading}</strong></p>
+          <p><strong>${heading}</strong></p>
         </div>
         <div class="content is-small  has-text-grey-700">
-            <p>${description}</p>
+          <p>${description}</p>
         </div>
         <div class="content is-small  has-text-grey-700">
-            <p>${metadata}</p>
+          <p>${author} ${date} ${readTime}</p>
         </div>
         <a href="${link}" class="button is-normal is-dark">
           <span class="icon  ">
@@ -64,7 +64,7 @@ export default async function decorate(block) {
         </div>
         <div class="column">
           <div class="columns is-tablet">
-            ${articlesListData.map((el) => rednerArticle(el)).join('')}
+            ${articlesListData.slice(0, 2).map((el) => rednerArticle(el)).join('')}
           </div>
         </div>
       </div>
