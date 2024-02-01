@@ -10,7 +10,9 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  getMetadata,
 } from './aem.js';
+import { loadTemplate } from './commons.js';
 
 const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
 const loadDependenciesLibs = async () => {
@@ -92,6 +94,8 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    const templateName = getMetadata('template');
+    if (templateName) await loadTemplate(doc, templateName);
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
   }

@@ -1,0 +1,7 @@
+/* article css'es */
+
+@media (width >= 1024px) {
+  body.article .sticky-container {
+    top: var(--nav-height);
+  }
+}
