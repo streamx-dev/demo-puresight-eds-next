@@ -33,7 +33,7 @@ const rednerArticle = ({
 export default async function decorate(block) {
   const heading = block.children[0].querySelector('h1, h2, h3, h4, h5, h6').innerHTML;
   const paragraphs = [...block.children[0].querySelectorAll('p')].filter((el) => !el.classList.contains('button-container'));
-  const link = block.children[0].querySelector('a.button');
+  const linkEl = block.children[0].querySelector('a.button');
   const articlesListContent = block.children[1].textContent.trim();
   let articlesListData;
 
@@ -46,24 +46,28 @@ export default async function decorate(block) {
     return;
   }
 
+  const renderLink = (link) => `
+      <a href="${link.href}" class="button is-normal is-white is-outlined is-inverted">
+        <span>${link.innerHTML}</span>
+      </a>
+    `;
+
   const ArticlesListFragment = document.createRange().createContextualFragment(`
-    <div class="container is-widescreen">
+    <div class="container is-widescreen articles-list">
       <div class="columns is-tablet">
         <div class="column">
-          <section class="section is-normal">
-            <h6 style="text-align: ;" class="title is-6 has-text-grey-900">
+          <section class="section is-normal articles-list-text">
+            <h6 class="title is-6 has-text-grey-900">
               ${heading}
             </h6>
             <div class="content is-medium  has-text-grey-700">
-              ${paragraphs.map((p) => p.outerHTML).join('')}
+              ${paragraphs.length ? paragraphs.map((p) => p.outerHTML).join('') : ''}
             </div>
-            <a href="${link.href}" class="button is-normal is-white is-outlined is-inverted">
-              <span>${link.innerHTML}</span>
-            </a>
+            ${linkEl ? renderLink(linkEl) : ''}
           </section>
         </div>
         <div class="column">
-          <div class="columns is-tablet">
+          <div class="columns is-tablet articles-list-article-section">
             ${articlesListData.slice(0, 2).map((el) => rednerArticle(el)).join('')}
           </div>
         </div>
