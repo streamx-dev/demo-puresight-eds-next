@@ -1,7 +1,7 @@
 [
   [
     {
-      "img": "https://storage.googleapis.com/puresight-pim-images/original/A1/A1kNj5aPzdL.jpg",
+      "img": "/images/placeholder_800x800.jpg",
       "text": "Hoffman",
       "rating": 1,
       "price": "450€",
@@ -10,7 +10,7 @@
   ],
   [
     {
-      "img": "https://storage.googleapis.com/puresight-pim-images/original/81/81oXIL6P58L.jpg",
+      "img": "/images/placeholder_800x800.jpg",
       "text": "Leila",
       "rating": 4,
       "price": "1550€",
@@ -19,7 +19,7 @@
   ],
   [
     {
-      "img": "https://storage.googleapis.com/puresight-pim-images/original/A1/A1R13eYKKKL.jpg",
+      "img": "/images/placeholder_800x800.jpg",
       "text": "Rivet",
       "rating": 1,
       "price": "450€",
@@ -28,7 +28,7 @@
   ],
   [
     {
-      "img": "https://storage.googleapis.com/puresight-pim-images/original/B1/B1d9hkLaFRS.jpg",
+      "img": "/images/placeholder_800x800.jpg",
       "text": "Hoffman",
       "rating": 4,
       "price": "1550€",
