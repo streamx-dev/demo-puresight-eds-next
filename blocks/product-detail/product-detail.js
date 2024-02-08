@@ -133,6 +133,7 @@ export default async function decorate(block) {
                   <figure class="image">
                     <img
                       src="${mainImage}"
+                      loading="eager"
                     />
                   </figure>
                 </div>

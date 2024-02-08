@@ -1,7 +1,7 @@
 [
   [
     {
-      "img": "/images/placeholder_800x800.jpg",
+      "img": "/images/placeholder_800x800.webp",
       "text": "Hoffman",
       "rating": 1,
       "price": "450€",
@@ -10,7 +10,7 @@
   ],
   [
     {
-      "img": "/images/placeholder_800x800.jpg",
+      "img": "/images/placeholder_800x800.webp",
       "text": "Leila",
       "rating": 4,
       "price": "1550€",
@@ -19,7 +19,7 @@
   ],
   [
     {
-      "img": "/images/placeholder_800x800.jpg",
+      "img": "/images/placeholder_800x800.webp",
       "text": "Rivet",
       "rating": 1,
       "price": "450€",
@@ -28,7 +28,7 @@
   ],
   [
     {
-      "img": "/images/placeholder_800x800.jpg",
+      "img": "/images/placeholder_800x800.webp",
       "text": "Hoffman",
       "rating": 4,
       "price": "1550€",

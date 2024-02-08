@@ -132,6 +132,6 @@ main > .section > *,
 }
 
 /* Cumulative Layout Shift Improvments */
-header.header-wrapper {
+body > header {
   height: var(--nav-height);
 }
