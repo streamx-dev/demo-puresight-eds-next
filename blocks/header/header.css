@@ -6,3 +6,8 @@ header {
   z-index: 1;
   background: white;
 }
+
+header .logo {
+  height: 66px;
+  width: 164px;
+}
