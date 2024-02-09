@@ -30,6 +30,8 @@ export default async function decorate(block) {
             <img class="header-logo"
               alt="${getTextLabel('PureSight')}"
               src="${logoImg}"
+              width="164"
+              height="66"
             />
           </a>
 

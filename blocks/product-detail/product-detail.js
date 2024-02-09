@@ -1,12 +1,13 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { getTextLabel } from '../../scripts/commons.js';
 
-const renderImagesTiles = (images) => {
-  const imagesTiles = images.map((img) => `
+const renderImagesTiles = (images, name) => {
+  const imagesTiles = images.map((img, index) => `
     <div class="column">
       <figure class="image">
         <img
           src="${img}"
+          alt="${name} ${index}"
         />
       </figure>
     </div>
@@ -26,6 +27,7 @@ const renderModal = (heading, tableHeadings, vendors) => {
           <figure class="image">
             <img
               src="${image}"
+              alt="${getTextLabel('Shop logo')}"
             />
           </figure>
         </div>
@@ -116,7 +118,7 @@ export default async function decorate(block) {
     name, mainImage, images, id, type, width, height, length, dimensionUnit, weight, weightUnit,
     bulletPoints, keywords, vendors,
   } = productData;
-  const imagesTiles = renderImagesTiles(images);
+  const imagesTiles = renderImagesTiles(images, name);
 
   const productDeatilFragment = document.createRange().createContextualFragment(`
     <div>
@@ -135,6 +137,7 @@ export default async function decorate(block) {
                       src="${mainImage}"
                       loading="eager"
                       class="main-image"
+                      alt="${name}"
                     />
                   </figure>
                 </div>
