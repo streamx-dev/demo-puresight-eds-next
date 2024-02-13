@@ -1,4 +1,5 @@
 import { getMetadata } from '../../scripts/aem.js';
+import { getTextLabel } from '../../scripts/commons.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 export default async function decorate(block) {
@@ -26,8 +27,11 @@ export default async function decorate(block) {
       <div class="container is-widescreen">
         <div class="navbar-brand">
           <a class="navbar-item" href="${logoLink}" alt="PureSight">
-            <img
+            <img class="header-logo"
+              alt="${getTextLabel('PureSight')}"
               src="${logoImg}"
+              width="164"
+              height="66"
             />
           </a>
 

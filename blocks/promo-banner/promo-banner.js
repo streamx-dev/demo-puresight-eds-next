@@ -20,7 +20,7 @@ export default async function decorate(block) {
         <div class="container">
           <div class="columns is-tablet">
             <div class="column">
-              <h6 style="text-align: ;" class="title is-6 has-text-black">
+              <h6 class="title is-6 has-text-black">
                 <span class="has-text-white">${heading}</span>
               </h6>
               <div class="content   ">
