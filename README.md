@@ -19,8 +19,77 @@ npm run lint
 
 ## Local development
 
-1. Create a new repository based on the `aem-boilerplate` template and add a mountpoint in the `fstab.yaml`
-1. Add the [AEM Code Sync GitHub App](https://github.com/apps/aem-code-sync) to the repository
 1. Install the [AEM CLI](https://github.com/adobe/aem-cli): `npm install -g @adobe/aem-cli`
 1. Start AEM Proxy: `aem up` (opens your browser at `http://localhost:3000`)
 1. Open the `{repo}` directory in your favorite IDE and start coding :)
+
+## Pages list with documents and blocks lists:
+
+The [index](https://main--puresight-demo--websight-rnd.hlx.page) page.
+
+---
+
+### Homepage
+Preview link: [Homepage](https://main--puresight-demo--websight-rnd.hlx.page/pages/homepage) \
+Document with content: [Hompage doc](https://docs.google.com/document/d/1djq9N8aBBwRju_D9QQqrP0DHuA77_Jw3xgpxmFAE1o0/edit)
+
+Homepage blocks list:
+* Hero
+* Carousel (use [/data/carousel.json](/data/carousel.json))
+* Cards list (use [/data/cards-list.json](/data/cards-list.json))
+* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Promo banner
+* Levels
+* Newsletter form
+
+---
+
+### Blog
+
+Preview link: [Blog](https://main--puresight-demo--websight-rnd.hlx.page/pages/blog) \
+Document with content: [Blog doc](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit)
+
+Blog blocks list:
+* Blog (use [/data/blog.json](/data/blog.json))
+
+---
+
+### Article
+
+Preview link: [Article](https://main--puresight-demo--websight-rnd.hlx.page/pages/article) \
+Document with content: [Blog doc](https://docs.google.com/document/d/1CQb0G7dBjPdVBJG5OP6RJUXTUwDyKPYM_QuRWKOlZlk/edit)
+
+Articles blocks list:
+* Metadata
+
+---
+
+### Products
+
+Preview link: [Products](https://main--puresight-demo--websight-rnd.hlx.page/pages/product) \
+Document with content: [Products doc](https://docs.google.com/document/d/12-rAJ178xUedsNPfyG66I7yuTZ9G9O769FB_qTqntNg/edit)
+
+Products blocks list:
+* Breadcrumb
+* Product detail
+* Product Reviews
+* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Section Metadata
+* Cards list (use [/data/related-products.json](/data/related-products.json))
+* Levels
+* Newsletter form
+* Metadata
+
+The products page take product id from metadata block (Product Id) and then fetch the JSON with procut ID. Example JSON file is [here](/data/products/B075X4VWF9.json)
+
+---
+
+### All JSON files
+
+* [/data/carousel.json](/data/carousel.json)
+* [/data/cards-list.json](/data/cards-list.json)
+* [/data/articles-list.json](/data/articles-list.json)
+* [/data/blog.json](/data/blog.json)
+* [/data/articles-list.json](/data/articles-list.json)
+* [/data/related-products.json](/data/related-products.json)
+* [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
