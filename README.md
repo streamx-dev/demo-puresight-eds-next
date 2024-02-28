@@ -37,7 +37,7 @@ Homepage blocks list:
 * Hero
 * Carousel (use [/data/carousel.json](/data/carousel.json))
 * Cards list (use [/data/cards-list.json](/data/cards-list.json))
-* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Articles list
 * Promo banner
 * Levels
 * Newsletter form
@@ -47,10 +47,11 @@ Homepage blocks list:
 ### Blog
 
 Preview link: [Blog](https://main--puresight-demo--websight-rnd.hlx.page/pages/blog) \
-Document with content: [Blog doc](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit)
+Document with content: [Blog doc](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit) \
+Articles list data: [Google sheets](https://docs.google.com/spreadsheets/d/1BlG-jJboqjobXv5Ob-rjTrSWsxywWK6ofj7FZA-vhTo/edit#gid=0)
 
 Blog blocks list:
-* Blog (use [/data/blog.json](/data/blog.json))
+* Blog
 
 ---
 
@@ -88,8 +89,5 @@ The products page take product id from metadata block (Product Id) and then fetc
 
 * [/data/carousel.json](/data/carousel.json)
 * [/data/cards-list.json](/data/cards-list.json)
-* [/data/articles-list.json](/data/articles-list.json)
-* [/data/blog.json](/data/blog.json)
-* [/data/articles-list.json](/data/articles-list.json)
 * [/data/related-products.json](/data/related-products.json)
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)

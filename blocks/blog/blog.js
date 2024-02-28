@@ -1,5 +1,5 @@
 const renderMainArticle = ({
-  link, img, heading, avatar, author, date, readTime,
+  link, img, heading, avatar, author, date, readTime, description,
 }) => {
   const articleFragment = document.createRange().createContextualFragment(`
     <a
@@ -20,6 +20,7 @@ const renderMainArticle = ({
               <h4 class="title is-4">
                 ${heading}
               </h4>
+              <p class="article-description">${description}</p>
               <div class="content-info-details">
                 <span class="image is-32x32">
                   <img
@@ -76,7 +77,6 @@ const renderArticle = ({
 
 export default async function decorate(block) {
   const blogLink = block.textContent.trim();
-
   let blogData;
 
   try {
@@ -90,9 +90,9 @@ export default async function decorate(block) {
 
   const blogFragment = document.createRange().createContextualFragment(`
     <div class="container">
-      ${renderMainArticle(blogData[0])}
+      ${renderMainArticle(blogData.data[0])}
       <div class="columns is-multiline is-desktop">
-        ${blogData.slice(1).map((el) => renderArticle(el)).join('')}
+        ${blogData.data.slice(1).map((el) => renderArticle(el)).join('')}
       </div>
     </div>
   `);
