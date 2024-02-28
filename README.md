@@ -89,5 +89,6 @@ The products page take product id from metadata block (Product Id) and then fetc
 
 * [/data/carousel.json](/data/carousel.json)
 * [/data/cards-list.json](/data/cards-list.json)
+* [/data/articles-list.json](/data/articles-list.json)
 * [/data/related-products.json](/data/related-products.json)
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
