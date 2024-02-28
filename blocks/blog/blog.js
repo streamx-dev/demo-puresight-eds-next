@@ -10,6 +10,7 @@ const renderMainArticle = ({
         <div class="column">
           <figure class="image-hero">
             <img
+              alt="${heading}"
               src="${img}"
             />
           </figure>
@@ -24,6 +25,7 @@ const renderMainArticle = ({
               <div class="content-info-details">
                 <span class="image is-32x32">
                   <img
+                    alt="${author}"
                     class="is-rounded"
                     src="${avatar}"
                   />
@@ -53,12 +55,13 @@ const renderArticle = ({
     >
       <div class="has-text-centered image-hero">
         <img
+          alt="${heading}"
           src="${img}"
         />
       </div>
       <div class="content">
         <div class="content-info">
-          <h6 class="title is-6">${heading}</h6>
+          <h5 class="title is-6">${heading}</h5>
           <div class="content-info-details">
             <p>
               <span class="author-content">${author}</span>
