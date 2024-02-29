@@ -89,3 +89,9 @@ The products page take product id from metadata block (Product Id) and then fetc
 ### All JSON files
 
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
+
+---
+
+### Spreadsheets
+
+Spreadsheets with [articles](https://docs.google.com/spreadsheets/d/1BlG-jJboqjobXv5Ob-rjTrSWsxywWK6ofj7FZA-vhTo/edit#gid=0) and [products](https://docs.google.com/spreadsheets/d/1SEIydwRrtQHA2gOwk5w72KuiHPDSyYGWCez4HaG-JNo/edit#gid=0) are converted to `json` and used as a source of data inside each component's block. Path to `json` is set inside document, example: [blog page](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit).
