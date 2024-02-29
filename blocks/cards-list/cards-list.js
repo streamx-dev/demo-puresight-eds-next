@@ -25,7 +25,7 @@ export default async function decorate(block) {
   }
   const splittedArray = [];
   while (carousel.data.length > 0) {
-    splittedArray.push(carousel.data.splice(0, 3));
+    splittedArray.push(carousel.data.splice(0, 4));
   }
   const carouselFragment = document.createRange().createContextualFragment(`
     <div class="columns is-tablet">
