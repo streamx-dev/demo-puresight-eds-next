@@ -35,8 +35,8 @@ Document with content: [Hompage doc](https://docs.google.com/document/d/1djq9N8a
 
 Homepage blocks list:
 * Hero
-* Carousel (use [/data/carousel.json](/data/carousel.json))
-* Cards list (use [/data/cards-list.json](/data/cards-list.json))
+* Carousel
+* Cards list
 * Articles list
 * Promo banner
 * Levels
