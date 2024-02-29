@@ -77,7 +77,7 @@ Products blocks list:
 * Product Reviews
 * Articles list
 * Section Metadata
-* Cards list (use [/data/related-products.json](/data/related-products.json))
+* Cards list
 * Levels
 * Newsletter form
 * Metadata
@@ -88,7 +88,4 @@ The products page take product id from metadata block (Product Id) and then fetc
 
 ### All JSON files
 
-* [/data/carousel.json](/data/carousel.json)
-* [/data/cards-list.json](/data/cards-list.json)
-* [/data/related-products.json](/data/related-products.json)
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
