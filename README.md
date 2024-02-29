@@ -35,9 +35,9 @@ Document with content: [Hompage doc](https://docs.google.com/document/d/1djq9N8a
 
 Homepage blocks list:
 * Hero
-* Carousel (use [/data/carousel.json](/data/carousel.json))
-* Cards list (use [/data/cards-list.json](/data/cards-list.json))
-* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Carousel
+* Cards list
+* Articles list
 * Promo banner
 * Levels
 * Newsletter form
@@ -47,10 +47,11 @@ Homepage blocks list:
 ### Blog
 
 Preview link: [Blog](https://main--puresight-demo--websight-rnd.hlx.page/pages/blog) \
-Document with content: [Blog doc](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit)
+Document with content: [Blog doc](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit) \
+Articles list data: [Google sheets](https://docs.google.com/spreadsheets/d/1BlG-jJboqjobXv5Ob-rjTrSWsxywWK6ofj7FZA-vhTo/edit#gid=0)
 
 Blog blocks list:
-* Blog (use [/data/blog.json](/data/blog.json))
+* Blog
 
 ---
 
@@ -68,14 +69,15 @@ Articles blocks list:
 
 Preview link: [Products](https://main--puresight-demo--websight-rnd.hlx.page/pages/product) \
 Document with content: [Products doc](https://docs.google.com/document/d/12-rAJ178xUedsNPfyG66I7yuTZ9G9O769FB_qTqntNg/edit)
+Products list data: [Google sheets](https://docs.google.com/spreadsheets/d/1SEIydwRrtQHA2gOwk5w72KuiHPDSyYGWCez4HaG-JNo/edit#gid=0)
 
 Products blocks list:
 * Breadcrumb
 * Product detail
 * Product Reviews
-* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Articles list
 * Section Metadata
-* Cards list (use [/data/related-products.json](/data/related-products.json))
+* Cards list
 * Levels
 * Newsletter form
 * Metadata
@@ -86,10 +88,10 @@ The products page take product id from metadata block (Product Id) and then fetc
 
 ### All JSON files
 
-* [/data/carousel.json](/data/carousel.json)
-* [/data/cards-list.json](/data/cards-list.json)
-* [/data/articles-list.json](/data/articles-list.json)
-* [/data/blog.json](/data/blog.json)
-* [/data/articles-list.json](/data/articles-list.json)
-* [/data/related-products.json](/data/related-products.json)
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
+
+---
+
+### Spreadsheets
+
+Spreadsheets with [articles](https://docs.google.com/spreadsheets/d/1BlG-jJboqjobXv5Ob-rjTrSWsxywWK6ofj7FZA-vhTo/edit#gid=0) and [products](https://docs.google.com/spreadsheets/d/1SEIydwRrtQHA2gOwk5w72KuiHPDSyYGWCez4HaG-JNo/edit#gid=0) are converted to `json` and used as a source of data inside each component's block. Path to `json` is set inside document, example: [blog page](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit).
