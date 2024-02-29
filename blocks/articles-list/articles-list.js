@@ -35,10 +35,10 @@ export default async function decorate(block) {
   const paragraphs = [...block.children[0].querySelectorAll('p')].filter((el) => !el.classList.contains('button-container'));
   const linkEl = block.children[0].querySelector('a.button');
   const articlesListContent = block.children[1].textContent.trim();
-  let articlesListData;
+  let articlesList;
 
   try {
-    articlesListData = await (await fetch(articlesListContent)).json();
+    articlesList = await (await fetch(articlesListContent)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
@@ -68,7 +68,7 @@ export default async function decorate(block) {
         </div>
         <div class="column">
           <div class="columns is-tablet articles-list-article-section">
-            ${articlesListData.slice(0, 2).map((el) => rednerArticle(el)).join('')}
+            ${articlesList.data.slice(0, 2).map((el) => rednerArticle(el)).join('')}
           </div>
         </div>
       </div>

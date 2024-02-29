@@ -80,10 +80,10 @@ const renderArticle = ({
 
 export default async function decorate(block) {
   const blogLink = block.textContent.trim();
-  let blogData;
+  let blog;
 
   try {
-    blogData = await (await fetch(blogLink)).json();
+    blog = await (await fetch(blogLink)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
@@ -93,9 +93,9 @@ export default async function decorate(block) {
 
   const blogFragment = document.createRange().createContextualFragment(`
     <div class="container">
-      ${renderMainArticle(blogData.data[0])}
+      ${renderMainArticle(blog.data[0])}
       <div class="columns is-multiline is-desktop">
-        ${blogData.data.slice(1).map((el) => renderArticle(el)).join('')}
+        ${blog.data.slice(1).map((el) => renderArticle(el)).join('')}
       </div>
     </div>
   `);

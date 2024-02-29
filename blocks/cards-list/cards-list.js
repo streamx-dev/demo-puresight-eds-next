@@ -13,20 +13,23 @@ const renderColumn = (columnCellsData) => {
 export default async function decorate(block) {
   const carouselSourceLink = block.textContent.trim();
 
-  let carouselData;
+  let carousel;
 
   try {
-    carouselData = await (await fetch(carouselSourceLink)).json();
+    carousel = await (await fetch(carouselSourceLink)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
 
     return;
   }
-
+  const splittedArray = [];
+  while (carousel.data.length > 0) {
+    splittedArray.push(carousel.data.splice(0, 3));
+  }
   const carouselFragment = document.createRange().createContextualFragment(`
     <div class="columns is-tablet">
-      ${carouselData.map((column) => renderColumn(column).outerHTML).join('')}
+      ${splittedArray.map((column) => renderColumn(column).outerHTML).join('')}
     </div>
   `);
 

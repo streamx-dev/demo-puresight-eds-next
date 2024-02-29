@@ -69,12 +69,13 @@ Articles blocks list:
 
 Preview link: [Products](https://main--puresight-demo--websight-rnd.hlx.page/pages/product) \
 Document with content: [Products doc](https://docs.google.com/document/d/12-rAJ178xUedsNPfyG66I7yuTZ9G9O769FB_qTqntNg/edit)
+Products list data: [Google sheets](https://docs.google.com/spreadsheets/d/1SEIydwRrtQHA2gOwk5w72KuiHPDSyYGWCez4HaG-JNo/edit#gid=0)
 
 Products blocks list:
 * Breadcrumb
 * Product detail
 * Product Reviews
-* Articles list (use [/data/articles-list.json](/data/articles-list.json))
+* Articles list
 * Section Metadata
 * Cards list (use [/data/related-products.json](/data/related-products.json))
 * Levels
@@ -89,6 +90,5 @@ The products page take product id from metadata block (Product Id) and then fetc
 
 * [/data/carousel.json](/data/carousel.json)
 * [/data/cards-list.json](/data/cards-list.json)
-* [/data/articles-list.json](/data/articles-list.json)
 * [/data/related-products.json](/data/related-products.json)
 * [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)

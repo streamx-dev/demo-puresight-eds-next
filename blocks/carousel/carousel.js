@@ -3,10 +3,10 @@ import createCard from '../../components/card/card.js';
 export default async function decorate(block) {
   const carouselSourceLink = block.textContent.trim();
 
-  let carouselData;
+  let carousel;
 
   try {
-    carouselData = await (await fetch(carouselSourceLink)).json();
+    carousel = await (await fetch(carouselSourceLink)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
@@ -14,7 +14,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const carouselItems = carouselData.map((data, index) => {
+  const carouselItems = carousel.data.map((data, index) => {
     const carouselListItemFragment = document.createRange().createContextualFragment(`
       <li class="glide__slide--active" style="width: 560px; margin-right: 16px;">
         ${createCard({ ...data, buttonText: 'Buy now' }, index).outerHTML}
