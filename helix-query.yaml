@@ -2,7 +2,7 @@ indices:
   blog:
     include:
       - /pages/articles/**
-    target: /drafts/mszeszko/query-index
+    target: /query-index
     properties:
       title:
         select: head > meta[property="og:title"]
