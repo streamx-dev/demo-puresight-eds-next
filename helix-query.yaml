@@ -2,7 +2,7 @@ indices:
   default:
     include:
       - /pages/articles/**
-    target: /query-index.json
+    target: /query-index.gsheet
     properties:
       title:
         select: head > meta[property="og:title"]
