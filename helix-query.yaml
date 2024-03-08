@@ -1,8 +1,7 @@
 indices:
   default:
     include:
-      - /pages/articles/**
-    target: /query-index
+      - /pages/**
     properties:
       title:
         select: head > meta[property="og:title"]
