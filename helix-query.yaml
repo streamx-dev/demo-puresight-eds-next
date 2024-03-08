@@ -2,7 +2,7 @@ indices:
   blog:
     include:
       - /pages/articles/**
-    target: /query-index
+    target: /query-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
