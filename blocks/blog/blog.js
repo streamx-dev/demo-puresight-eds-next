@@ -84,7 +84,6 @@ export default async function decorate(block) {
 
   try {
     blog = await (await fetch(blogLink)).json();
-    console.log(blog.data);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
