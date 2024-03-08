@@ -1,7 +1,8 @@
 indices:
   default:
     include:
-      - /pages/**
+      - /pages/articles/**
+    target: /pages/articles-list.json
     properties:
       title:
         select: head > meta[property="og:title"]
