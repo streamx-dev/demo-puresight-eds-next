@@ -1,8 +1,8 @@
 indices:
-  default:
+  blog:
     include:
       - /pages/articles/**
-    target: /drafts/mszeszko/query-index.json
+    target: /drafts/mszeszko/query-index
     properties:
       title:
         select: head > meta[property="og:title"]
