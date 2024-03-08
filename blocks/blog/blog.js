@@ -1,9 +1,9 @@
 const renderMainArticle = ({
-  link, img, heading, avatar, author, date, readTime, description,
+  path, img, heading, avatar, author, date, readTime, description,
 }) => {
   const articleFragment = document.createRange().createContextualFragment(`
     <a
-      href="${link}"
+      href="${path}"
       class="article-featured"
     >
       <div class="columns is-desktop">
@@ -46,11 +46,11 @@ const renderMainArticle = ({
 };
 
 const renderArticle = ({
-  link, img, heading, author, date, readTime,
+  path, img, heading, author, date, readTime,
 }) => {
   const articleFragment = document.createRange().createContextualFragment(`
     <a
-      href="${link}"
+      href="${path}"
       class="column is-4-desktop article-thumbnail"
     >
       <div class="has-text-centered image-hero">
@@ -84,6 +84,7 @@ export default async function decorate(block) {
 
   try {
     blog = await (await fetch(blogLink)).json();
+    console.log(blog.data);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(e);
