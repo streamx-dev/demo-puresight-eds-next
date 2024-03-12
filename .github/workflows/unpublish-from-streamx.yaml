@@ -1,9 +1,9 @@
-name: Publish to StreamX
+name: Unpublish from StreamX
 
 on:
   repository_dispatch:
     types:
-      - resource-published
+      - resource-unpublished
 jobs:
   check-event-status:
     runs-on: ubuntu-latest
@@ -19,14 +19,11 @@ jobs:
     if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
     runs-on: ubuntu-latest
     steps:
-      - name: Publish to StreamX
+      - name: Unpublish from StreamX
         run: |
           sleep 1s
           PAGE_PATH=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          EDS_PAGE_URL="${{ vars.EDS_DOMAIN_URL }}$PAGE_PATH"
-          echo "Page URL: $EDS_PAGE_URL"
-          pageHtml=$(curl -s $EDS_PAGE_URL | jq . -sR)
-          echo "Page HTML: $pageHtml"
-          streamxResponse=$(curl -X PUT ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" -H 'Content-Type: application/json' -d "{\"content\": {\"bytes\": $pageHtml}}")
+          streamxResponse=$(curl -X DELETE ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}")
           echo "StreamX response: $streamxResponse"
         shell: bash
+        
