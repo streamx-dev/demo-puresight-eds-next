@@ -23,7 +23,7 @@ jobs:
         run: |
           sleep 1s
           PAGE_PATH=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          streamxResponse=$(curl -X DELETE ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}")
-          echo "StreamX response: $streamxResponse"
+          streamxResponse=$(curl -i -X DELETE ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH.html -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}")
+          echo -e "StreamX response:\n$streamxResponse"
         shell: bash
         
