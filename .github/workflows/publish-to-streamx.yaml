@@ -27,6 +27,6 @@ jobs:
           echo "Page URL: $EDS_PAGE_URL"
           pageHtml=$(curl -s $EDS_PAGE_URL | jq . -sR)
           echo "Page HTML: $pageHtml"
-          streamxResponse=$(curl -X PUT ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" -H 'Content-Type: application/json' -d "{\"content\": {\"bytes\": $pageHtml}}")
-          echo "StreamX response: $streamxResponse"
+          streamxResponse=$(curl -i -X PUT ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH.html -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" -H 'Content-Type: application/json' -d "{\"content\": {\"bytes\": $pageHtml}}")
+          echo -e "StreamX response:\n$streamxResponse"
         shell: bash
