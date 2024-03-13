@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
-          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+          CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
         run: |
-          echo $EVENT_CONTEXT
+          echo $CLIENT_PAYLOAD
           echo "Status: ${{ github.event.client_payload.status }}"
           echo "Path: ${{ github.event.client_payload.path }}"
 
@@ -27,6 +27,11 @@ jobs:
           echo "Page URL: $EDS_PAGE_URL"
           pageHtml=$(curl -s $EDS_PAGE_URL | jq . -sR)
           echo "Page HTML: $pageHtml"
-          streamxResponse=$(curl -i -X PUT ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH.html -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" -H 'Content-Type: application/json' -d "{\"content\": {\"bytes\": $pageHtml}}")
+          streamxKey=${{ vars.STREAMX_PAGE_PUBLICATION_API }}${{ vars.STREAMX_KEY_PREFIX }}$PAGE_PATH
+          echo "StreamX URL: $streamxKey"
+          streamxResponse=$(curl -i -X PUT $streamxKey \
+            -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
+            -H 'Content-Type: application/json' \
+            -d "{\"content\": {\"bytes\": $pageHtml}}")
           echo -e "StreamX response:\n$streamxResponse"
         shell: bash
