@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
-          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+          CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
         run: |
-          echo $EVENT_CONTEXT
+          echo $CLIENT_PAYLOAD
           echo "Status: ${{ github.event.client_payload.status }}"
           echo "Path: ${{ github.event.client_payload.path }}"
 
-  publish-to-streamx:
+  unpublish-from-streamx:
     if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +23,10 @@ jobs:
         run: |
           sleep 1s
           PAGE_PATH=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          streamxResponse=$(curl -i -X DELETE ${{ vars.STREAMX_PAGE_PUBLICATION_API }}$PAGE_PATH.html -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}")
+          streamxKey=${{ vars.STREAMX_PAGE_PUBLICATION_API }}${{ vars.STREAMX_KEY_PREFIX }}$PAGE_PATH
+          echo "StreamX URL: $streamxKey"
+          streamxResponse=$(curl -i -X DELETE $streamxKey \
+            -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}")
           echo -e "StreamX response:\n$streamxResponse"
         shell: bash
         
