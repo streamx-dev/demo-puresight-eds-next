@@ -95,3 +95,27 @@ The products page take product id from metadata block (Product Id) and then fetc
 ### Spreadsheets
 
 Spreadsheets with [articles](https://docs.google.com/spreadsheets/d/1BlG-jJboqjobXv5Ob-rjTrSWsxywWK6ofj7FZA-vhTo/edit#gid=0) and [products](https://docs.google.com/spreadsheets/d/1SEIydwRrtQHA2gOwk5w72KuiHPDSyYGWCez4HaG-JNo/edit#gid=0) are converted to `json` and used as a source of data inside each component's block. Path to `json` is set inside document, example: [blog page](https://docs.google.com/document/d/1YurrOa8SQfUMInQ1kBB6INLEGxrsjJO8MzZKfavQimY/edit).
+
+## Publication to StreamX
+
+There are two GitHub workflows which make it possible to publish and unpublish pages to/from
+StreamX:
+
+- [publish-to-streamx.yaml](.github/workflows/publish-to-streamx.yaml)
+- [unpublish-from-streamx.yaml](.github/workflows/unpublish-from-streamx.yaml)
+
+Once page is publish or unpublished a relevant workflow will be triggered automatically and make a
+call to StreamX instance.
+
+Workflows require few configuration options defined as variables and secrets:
+
+- Variable `EDS_DOMAIN_URL`: a URL to Edge Delivery Services domain,
+  e.g.: `https://main--puresight-demo--websight-rnd.hlx.live`.
+- Variable `STREAMX_KEY_PREFIX` (optional): a prefix to add to each publication key,
+  e.g.: `/published/puresight`.
+- Variable `STREAMX_PAGE_PUBLICATION_API`: a URL to StreamX publication API,
+  e.g.: `https://ingestion.streamx.tech/publications/v1/pages`.
+- Secret `STREAMX_TOKEN`: JWT value required by StreamX publication API.
+
+Both workflows can be
+[enabled and disabled manually in GitHub](https://docs.github.com/en/actions/using-workflows/disabling-and-enabling-a-workflow).
