@@ -1,6 +1,15 @@
-const createCard = ({
-  img, text, rating, price, link, buttonText,
-}, index) => {
+const createCard = (item, index) => {
+  const itemData = {
+    img: item.mainImage,
+    text: item.name.split(' ').slice(0, 2).join(' '),
+    rating: 5,
+    price: item.price?.value === undefined ? null : `${item.price.value}€`,
+    link: item.urlSafeName,
+  };
+  const {
+    img, text, rating, price, link,
+  } = itemData;
+
   const ratingIconFull = '<i class="mdi mdi-star" aria-hidden="true"></i>';
   const ratingIconEmpty = '<i class="mdi mdi-star-outline" aria-hidden="true"></i>';
   const ratingHTML = document.createRange().createContextualFragment(`
@@ -24,10 +33,10 @@ const createCard = ({
             </div>
             ${ratingHTML.children[0].outerHTML}
             <div class="content is-medium  has-text-primary-700">
-              <p>${price}</p>
+              <p class="${price === null ? 'is-hidden' : ''}">${price}</p>
             </div>
             <a href="${link}" class="button is-normal is-dark">
-            ${buttonText ? `<span>${buttonText}</span>` : ''}
+            ${item.buttonText ? `<span>${item.buttonText}</span>` : ''}
             <span class="icon">
             <i class="mdi mdi-24px mdi-cart-outline" aria-hidden="false"></i>
             </span>

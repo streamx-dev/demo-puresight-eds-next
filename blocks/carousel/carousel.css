@@ -1,5 +1,20 @@
 /* carousel csses */
+.carousel .card {
+  height: 100%;
+}
+
+.carousel .card-image {
+  height: 100%;
+}
+
+.carousel .card-image .image {
+  height: 100%;
+}
 
 .carousel .card-content .rating {
   display: flex;
+}
+
+.carousel .card-image .image img {
+  object-fit: cover;
 }
