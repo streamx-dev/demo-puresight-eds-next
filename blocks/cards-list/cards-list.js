@@ -23,9 +23,20 @@ export default async function decorate(block) {
 
     return;
   }
+  const items = carousel.values;
   const splittedArray = [];
-  while (carousel.values.length > 0) {
-    splittedArray.push(carousel.values.splice(0, 3));
+
+  let rowsNumber = 4;
+  if (items.length % 5 === 0) {
+    rowsNumber = 5;
+  } else if (items.length % 3 === 0) {
+    rowsNumber = 3;
+  } else if (items.length % 4 === 0) {
+    rowsNumber = 4;
+  }
+
+  while (items.length > 0) {
+    splittedArray.push(items.splice(0, rowsNumber));
   }
   const carouselFragment = document.createRange().createContextualFragment(`
     <div class="columns is-tablet">
