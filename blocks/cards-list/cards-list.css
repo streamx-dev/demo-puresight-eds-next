@@ -1,4 +1,13 @@
 /* cards list css'es */
+.product-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+    width: 100%;
+}
+.product-tiles .card {
+    width: 23.5%;
+}
 .product-tiles .card .image {
     border: 1px solid var(--color-primary--200);
 }

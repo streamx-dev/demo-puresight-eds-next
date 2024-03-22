@@ -18,4 +18,5 @@
 
 .carousel .card-image .image img {
   object-fit: cover;
+  max-height: 380px;
 }
