@@ -35,10 +35,9 @@ jobs:
           fi
           streamxKey=${{ vars.STREAMX_PAGE_PUBLICATION_API }}${{ vars.STREAMX_KEY_PREFIX }}$PAGE_PATH
           echo "StreamX URL: $streamxKey"
-          streamxResponseCode=$(curl -v -X PUT $streamxKey \
+          streamxResponseCode=$(curl -i -X PUT $streamxKey \
             --write-out %{http_code} \
             --insecure \
-            --http1.1 \
             --output streamx_response.txt \
             -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
             -H 'Content-Type: application/json' \
