@@ -38,6 +38,7 @@ jobs:
           streamxResponseCode=$(curl -i -X PUT $streamxKey \
             --write-out %{http_code} \
             --insecure \
+            --http1.1 \
             --output streamx_response.txt \
             -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
             -H 'Content-Type: application/json' \
