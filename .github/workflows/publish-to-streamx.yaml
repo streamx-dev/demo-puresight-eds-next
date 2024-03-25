@@ -37,6 +37,7 @@ jobs:
           echo "StreamX URL: $streamxKey"
           streamxResponseCode=$(curl -i -X PUT $streamxKey \
             --write-out %{http_code} \
+            --http1.1 \
             --insecure \
             --output streamx_response.txt \
             -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
