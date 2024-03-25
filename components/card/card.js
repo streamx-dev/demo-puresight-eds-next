@@ -4,7 +4,7 @@ const createCard = (item, index) => {
     text: item.name?.split(' ').slice(0, 2).join(' ') || '',
     rating: 5,
     price: item.price?.value === undefined ? null : `${item.price.value}€`,
-    link: item.urlSafeName,
+    link: `/products/${item.urlSafeName}.html`,
   };
   const {
     img, text, rating, price, link,
