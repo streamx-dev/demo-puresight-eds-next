@@ -40,7 +40,7 @@ jobs:
             --insecure \
             --output streamx_response.txt \
             -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
-            -H 'Content-Type: application/json' \
+            -H "Content-Type: application/json" \
             -d "{\"content\": {\"bytes\": $pageHtml}}")
           echo -e "StreamX response:\n$(cat streamx_response.txt)"
           if [ $streamxResponseCode != 202 ]; then
