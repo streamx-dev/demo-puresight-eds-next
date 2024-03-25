@@ -14,7 +14,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const carouselItems = carousel.data.map((data, index) => {
+  const carouselItems = carousel.values.map((data, index) => {
     const carouselListItemFragment = document.createRange().createContextualFragment(`
       <li class="glide__slide--active" style="width: 560px; margin-right: 16px;">
         ${createCard({ ...data, buttonText: 'Buy now' }, index).outerHTML}
