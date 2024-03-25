@@ -12,4 +12,9 @@
 
 .product-tiles .card .image {
     border: 1px solid #f1ebe2;
+    height: 22vw;
+}
+
+.product-tiles .card .image img {
+    height: 100%;
 }

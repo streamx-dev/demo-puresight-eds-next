@@ -5,18 +5,29 @@
 }
 
 .carousel .card-image {
-  height: 100%;
+  background: white;
 }
 
-.carousel .card-image .image {
-  height: 100%;
+.carousel .card-image .image img {
+  object-fit: cover;
+  height: 300px;
 }
 
 .carousel .card-content .rating {
   display: flex;
 }
 
-.carousel .card-image .image img {
-  object-fit: cover;
-  max-height: 380px;
+@media(width >= 1024px) {
+  .carousel .card-image .image img {
+    max-height: 380px;
+    height: 100%;
+  }
+  
+  .carousel .card-image {
+    height: 100%;
+  }
+  
+  .carousel .card-image .image {
+    height: 100%;
+  }
 }

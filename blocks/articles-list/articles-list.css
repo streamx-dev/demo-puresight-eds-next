@@ -31,3 +31,9 @@
     flex-direction: row;
   }
 }
+
+.articles-list-article-section {
+  .image img {
+    object-fit: cover;
+  }
+}

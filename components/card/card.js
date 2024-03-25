@@ -1,7 +1,7 @@
 const createCard = (item, index) => {
   const itemData = {
     img: item.mainImage,
-    text: item.name.split(' ').slice(0, 2).join(' '),
+    text: item.name?.split(' ').slice(0, 2).join(' ') || '',
     rating: 5,
     price: item.price?.value === undefined ? null : `${item.price.value}€`,
     link: item.urlSafeName,
@@ -22,7 +22,7 @@ const createCard = (item, index) => {
   const cardFragmet = document.createRange().createContextualFragment(`
     <div class="card">
       <div class="card-image">
-        <figure class="image is-3by4">
+        <figure class="image">
             <img src="${img}" loading="${index < 2 ? 'eager' : 'lazy'}">
         </figure>
       </div>
