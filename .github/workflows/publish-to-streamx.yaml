@@ -46,7 +46,9 @@ jobs:
                    \"key\" : \"$streamxKey\",
                    \"action\" : \"publish\",
                    \"eventTime\" : null,
-                   \"properties\" : { },
+                   \"properties\" : {
+                     \"sx:type\": \"page/blog\"
+                   },
                    \"payload\" : {
                      \"dev.streamx.blueprints.data.Page\" : {
                        \"content\" : {
