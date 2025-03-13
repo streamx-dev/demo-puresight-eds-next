@@ -1,6 +1,6 @@
 # PureSight demo with Edge Delivery Services
 
-This repo is part of StreamX demo. See https://teamds.atlassian.net/wiki/spaces/StreamX/pages/733970445/StreamX+demo+environment+setup
+This repo is part of StreamX demo. See https://teamds.atlassian.net/wiki/spaces/StreamX/pages/1192722453/StreamX+demo+next+-+environment+setup
 
 ## Environments
 - Preview (https://main--{repo}--{owner}.hlx.page/):
@@ -10,17 +10,11 @@ This repo is part of StreamX demo. See https://teamds.atlassian.net/wiki/spaces/
 
 ## Docs with content
 
-Google Drive with docs: https://drive.google.com/drive/folders/0AD7Au_cSyxqQUk9PVA
+Google Drive with docs: https://drive.google.com/drive/folders/1W8cTrBFYy6NyNmh3BrURjZj1-DAG_xG6
 
 ## Editing docs and publishing content:
 
 Install browser plugin as described here: https://www.aem.live/developer/tutorial#preview-and-publish-your-content
-
-Configure the plugin:
-- open plugin options
-- add new project
-- set organization name and project name according to GitHub repository name and organization
-- validate if Google docs preview and live view are displayed using the proper environments as described above
 
 ## Installation
 
