@@ -3,9 +3,9 @@ Please always provide the [GitHub issue(s)](../issues) your PR is for, as well a
 Fix #<gh-issue-id>
 
 Test URLs preview:
-- Before https://main--demo-puresight-eds--streamx-dev.hlx.page/
-- https://<your-branch-name>--demo-puresight-eds--streamx-dev.hlx.page/
+- Before https://main--demo-puresight-eds-next--streamx-dev.hlx.page/
+- https://<your-branch-name>--demo-puresight-eds-next--streamx-dev.hlx.page/
 
 Test URLs live:
-- Before: https://main--demo-puresight-eds--streamx-dev.hlx.live/
-- After: https://<your-branch-name>--demo-puresight-eds--streamx-dev.hlx.live/
+- Before: https://main--demo-puresight-eds-next--streamx-dev.hlx.live/
+- After: https://<your-branch-name>--demo-puresight-eds-next--streamx-dev.hlx.live/

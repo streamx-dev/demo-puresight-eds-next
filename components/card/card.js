@@ -1,10 +1,10 @@
 const createCard = (item, index) => {
   const itemData = {
-    img: item.mainImage,
+    img: item.primaryImage.url,
     text: item.name?.split(' ').slice(0, 2).join(' ') || '',
     rating: 5,
     price: item.price?.value === undefined ? null : `${item.price.value}€`,
-    link: `/products/${item.urlSafeName}.html`,
+    link: `/products/${item.slug}.html`,
   };
   const {
     img, text, rating, price, link,
