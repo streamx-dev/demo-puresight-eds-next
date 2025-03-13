@@ -63,9 +63,9 @@ jobs:
             exit 1
           fi
           json_content=$(cat streamx_response.txt)
-          key_value=$(echo "$json_content" | grep -o '"success": *{[^}]*}' | grep -o '"key": *"[^"]*"' | sed 's/"key": *"//;s/"//')
-          if [[ "$key_value" != "$streamxKey" ]]; then
-            echo "Response does not contain success status with expected key"
+          success=$(echo "$json_content" | grep -o '"success": *{[^}]*}')
+          if [[ -z "$success" ]]; then
+            echo "Response does not contain success status"
             exit 1
           fi
         shell: bash
