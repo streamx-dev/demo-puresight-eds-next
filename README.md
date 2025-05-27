@@ -28,6 +28,7 @@ Configure the plugin:
 - Go back to the Google Drive folder
 - In the `Pick a project` area, pick the demo-puresight-eds environment you've just added to AEM Sidekick 
 - Edit and publish a blog file to validate the connection is working
+- Go to https://github.com/streamx-dev/demo-puresight-eds-next/actions and verify the `Publish to StreamX` action is triggered and passes
 
 ## Installation
 
