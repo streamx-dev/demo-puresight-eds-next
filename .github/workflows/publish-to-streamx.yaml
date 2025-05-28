@@ -19,53 +19,19 @@ jobs:
     if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build PublishToStreamx application
+        run: mvn clean package
+
       - name: Publish to StreamX
         run: |
           sleep 1s
           PAGE_PATH=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          EDS_PAGE_URL="${{ vars.EDS_DOMAIN_URL }}$PAGE_PATH"
-          echo "Page URL: $EDS_PAGE_URL"
-          edsResponseCode=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_PAGE_URL)
-          echo "Status code: ${edsResponseCode}"
-          pageHtml=$(cat eds_response.txt | jq . -sR)
-          echo "Page HTML: $pageHtml"
-          if [ $edsResponseCode != 200 ]; then
-            echo "Cannot fetch page from EDS. Status code is $edsResponseCode"
-            exit 1
-          fi
-          streamxApi=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
-          streamxKey="$PAGE_PATH"
-          echo "StreamX URL: $streamxApi key: $streamxKey"
-          streamxResponseCode=$(curl -i -X POST $streamxApi \
-            --write-out %{http_code} \
-            --insecure \
-            --output streamx_response.txt \
-            -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-                   \"key\" : \"$streamxKey\",
-                   \"action\" : \"publish\",
-                   \"eventTime\" : null,
-                   \"properties\" : {
-                     \"sx:type\": \"page/blog\"
-                   },
-                   \"payload\" : {
-                     \"dev.streamx.blueprints.data.Page\" : {
-                       \"content\" : {
-                         \"bytes\" : $pageHtml
-                       }
-                     }
-                   }
-                }")
-          echo -e "StreamX response:\n$(cat streamx_response.txt)"
-          if [ $streamxResponseCode != 202 ]; then
-            echo "Cannot publish to StreamX. Status code is: $streamxResponseCode"
-            exit 1
-          fi
-          json_content=$(cat streamx_response.txt)
-          success=$(echo "$json_content" | grep -o '"success": *{[^}]*}')
-          if [[ -z "$success" ]]; then
-            echo "Response does not contain success status"
-            exit 1
-          fi
-        shell: bash
+          java -jar target/demo-puresight-starter-next-1.0-0-SNAPSHOT-jar-with-dependencies.jar $PAGE_PATH
