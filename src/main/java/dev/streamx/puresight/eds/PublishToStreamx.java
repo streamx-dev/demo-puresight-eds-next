@@ -49,42 +49,6 @@ public class PublishToStreamx {
     }
   }
 
-  static class Content {
-
-    public String bytes;
-
-    public Content() {
-
-    }
-
-    public Content(String bytes) {
-      this.bytes = bytes;
-    }
-
-    public String getBytes() {
-      return bytes;
-    }
-  }
-
-
-  static class Page {
-
-    public Content content;
-
-    public Page() {
-
-    }
-
-    public Page(Content content) {
-      this.content = content;
-    }
-
-    public Content getContent() {
-      return content;
-    }
-  }
-
-
   private static boolean publishPageToStreamx(String streamxIngestionBaseUrl, @Nullable String authToken, String key, String content) throws Exception {
     StreamxClient streamxClient = StreamxClient.builder(streamxIngestionBaseUrl)
         .setAuthToken(StringUtils.isBlank(authToken) ? null : authToken)
