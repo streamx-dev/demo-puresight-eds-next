@@ -138,6 +138,9 @@ Workflows require few configuration options defined as variables and secrets:
   e.g.: `https://main--demo-puresight-eds-next--streamx-dev.hlx.live`.
 - Variable `STREAMX_PAGE_PUBLICATION_API`: a URL to StreamX publication API,
   e.g.: `https://ingestion.streamx.tech/publications/v1/channels/pages/messages`.
+- Variable `STREAMX_STATIC_WEB_RESOURCE_PUBLICATION_API`: a URL to StreamX publication API for
+  static web resources,
+  e.g.: `https://ingestion.streamx.tech/publications/v1/channels/web-resources/messages`.
 - Secret `STREAMX_TOKEN`: JWT value required by StreamX publication API.
 
 Both workflows can be

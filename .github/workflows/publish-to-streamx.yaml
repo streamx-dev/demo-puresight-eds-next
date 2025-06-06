@@ -69,3 +69,58 @@ jobs:
             exit 1
           fi
         shell: bash
+
+  publish-web-resources-to-streamx:
+    if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && (endsWith(github.event.client_payload.path, '.js') || endsWith(github.event.client_payload.path, '.css'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish JS or CSS web resource to StreamX
+        run: |
+          sleep 1s
+          WEB_RESOURCE_PATH="${{ github.event.client_payload.path }}"
+          EDS_RESOURCE_URL="${{ vars.EDS_DOMAIN_URL }}$WEB_RESOURCE_PATH"
+          echo "Web resource URL: $EDS_RESOURCE_URL"
+          edsResponseCode=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_RESOURCE_URL)
+          echo "Status code: ${edsResponseCode}"
+          webResourceData=$(cat eds_response.txt | jq . -sR)
+          echo "Web resource data: $webResourceData"
+          if [ $edsResponseCode != 200 ]; then
+            echo "Cannot fetch CSS or JS from EDS. Status code is $edsResponseCode"
+            exit 1
+          fi
+          streamxApi=${{ vars.STREAMX_STATIC_WEB_RESOURCE_PUBLICATION_API }}
+          streamxKey="$WEB_RESOURCE_PATH"
+          echo "StreamX URL: $streamxApi key: $streamxKey"
+          streamxResponseCode=$(curl -i -X POST $streamxApi \
+            --write-out %{http_code} \
+            --insecure \
+            --output streamx_response.txt \
+            -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+                   \"key\" : \"$streamxKey\",
+                   \"action\" : \"publish\",
+                   \"eventTime\" : null,
+                   \"properties\" : {
+                     \"sx:type\": \"web-resource/static\"
+                   },
+                   \"payload\" : {
+                     \"dev.streamx.blueprints.data.WebResource\" : {
+                       \"content\" : {
+                         \"bytes\" : $webResourceData
+                       }
+                     }
+                   }
+                }")
+          echo -e "StreamX response:\n$(cat streamx_response.txt)"
+          if [ $streamxResponseCode != 202 ]; then
+            echo "Cannot publish to StreamX. Status code is: $streamxResponseCode"
+            exit 1
+          fi
+          json_content=$(cat streamx_response.txt)
+          success=$(echo "$json_content" | grep -o '"success": *{[^}]*}')
+          if [[ -z "$success" ]]; then
+            echo "Response does not contain success status"
+            exit 1
+          fi
+        shell: bash
