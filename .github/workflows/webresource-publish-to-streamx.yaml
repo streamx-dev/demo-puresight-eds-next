@@ -1,3 +1,5 @@
+name: Publish web resource to StreamX
+
 on:
   push:
     branches:
