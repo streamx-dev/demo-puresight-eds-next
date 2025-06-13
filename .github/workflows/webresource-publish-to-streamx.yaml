@@ -43,6 +43,7 @@ jobs:
           echo "$patterns"
           echo "--------------------------------------"
 
+
           changed_files=$(`git diff --name-only HEAD HEAD~${context.payload.pull_request}`)
 
           for file in $changed_files; do
