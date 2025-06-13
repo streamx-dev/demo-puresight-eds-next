@@ -19,17 +19,12 @@ jobs:
           fetch-depth: 0
 
       - name: Modified files
-        run: |
-          case '${{ github.event_name }}' in
-            push)
-              firstCommit='${{ github.event.commits[0].id }}'
-              lastCommit='${{ github.event.commits[-1].id }}'
-              ;;
-            pull_request)
-              firstCommit='${{ github.event.base_ref }}'
-              lastCommit='${{ github.event.head_ref }}'
-              ;;
-          esac
-          changedFiles=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { execSync } = require('child_process')
+            const { commits } = context.payload.pull_request
+            const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
+            const files = rawFiles.split('\n').filter(Boolean)
 
-          console.log(changedFiles)
+            console.log(files)
