@@ -19,32 +19,32 @@ jobs:
           fetch-depth: 0
 
       - name: Publish modified files to StreamX
-        run: |
-          sleep 1s
-          DRY_RUN=${{ vars.DRY_RUN == 'true' ? true : false }}
-          if $DRY_RUN; then
-            echo "Dry run mode: enabled"
-          fi
-          PUBLISH_STREAMX_FILES_PATTERNS=${{ vars.PUBLISH_STREAMX_FILES_PATTERNS}}
-          if [[ ! "$PUBLISH_STREAMX_FILES_PATTERNS" ]]; then
-            echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped."
-            exit 1;
-          fi
-          echo "Accepted file patterns: $PUBLISH_STREAMX_FILES_PATTERNS"
-          echo "--------------------------------------"
-          console.log(context.payload.pull_request)
+        uses: actions/github-script@v6
+        with:
+          script: |
+            sleep 1s
+            DRY_RUN=${{ vars.DRY_RUN == 'true' ? true : false }}
+            if ($DRY_RUN) then
+              echo "Dry run mode: enabled"
+            fi
+            PUBLISH_STREAMX_FILES_PATTERNS="${{ vars.PUBLISH_STREAMX_FILES_PATTERNS}}";
+            if (PUBLISH_STREAMX_FILES_PATTERNS || PUBLISH_STREAMX_FILES_PATTERNS === "") {
+              console.log("Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.");
+              return;
+            }
+            echo "Accepted file patterns: $PUBLISH_STREAMX_FILES_PATTERNS"
+            echo "--------------------------------------"
+            console.log(context.payload.pull_request)
 
-          const { execSync } = require('child_process')
-          const { commits } = context.payload.pull_request
-          const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
-          const files = rawFiles.split('\n').filter(Boolean)
+            const { execSync } = require('child_process')
+            const { commits } = context.payload.pull_request
+            const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
+            const files = rawFiles.split('\n').filter(Boolean)
 
-          console.log(files)
-          for file in $files; do
-            echo "$file was changed"
-            for pattern in $PUBLISH_STREAMX_FILES_PATTERNS; do
-              echo "$pattern verification"
+            console.log(files)
+            for file in $files; do
+              echo "$file was changed"
+              for pattern in $PUBLISH_STREAMX_FILES_PATTERNS; do
+                echo "$pattern verification"
+              done
             done
-          done
-
-        shell: bash
