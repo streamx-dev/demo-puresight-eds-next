@@ -49,7 +49,7 @@ jobs:
           echo "--------------------------------------"
           echo "--------------------------------------"
 
-          changed_files=$(`git diff --name-only HEAD HEAD~"${{ github.event.pull_request.commits }}"`)
+          changed_files=$(`git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }}`)
 
           for file in $changed_files; do
             echo "$file was changed"
