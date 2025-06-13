@@ -2,15 +2,15 @@ name: Publish web resource to StreamX
 
 on:
   pull_request:
-    branches:
-      - main
-  push:
+    types:
+      - closed
     branches:
       - main
 
 jobs:
-  get_files:
-    name: run_on_pr_or_push
+  if_merged:
+    if: github.event.pull_request.merged == true
+    name: run_on_pr_merged
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,6 +22,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            console.log(context.payload.pull_request)
+
             const { execSync } = require('child_process')
             const { commits } = context.payload.pull_request
             const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
