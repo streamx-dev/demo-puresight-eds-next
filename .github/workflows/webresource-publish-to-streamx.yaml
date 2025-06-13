@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  if_merged:
+  publish-if-merged:
     if: github.event.pull_request.merged == true
     name: run_on_pr_merged
     runs-on: ubuntu-latest
@@ -18,10 +18,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Modified files
+      - name: Publish modified files to StreamX
         uses: actions/github-script@v6
         with:
           script: |
+            sleep 1s
+            DRY_RUN=${{ vars.DRY_RUN == 'true' ? true : false }}
+            if ($DRY_RUN) then
+              echo "Dry run mode: enabled"
+            fi
+            PUBLISH_STREAMX_FILES_PATTERNS="${{ vars.PUBLISH_STREAMX_FILES_PATTERNS}}";
+            if (PUBLISH_STREAMX_FILES_PATTERNS || PUBLISH_STREAMX_FILES_PATTERNS === "") {
+              console.log("Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.");
+              return;
+            }
+            echo "Accepted file patterns: $PUBLISH_STREAMX_FILES_PATTERNS"
+            echo "--------------------------------------"
             console.log(context.payload.pull_request)
 
             const { execSync } = require('child_process')
@@ -30,3 +42,9 @@ jobs:
             const files = rawFiles.split('\n').filter(Boolean)
 
             console.log(files)
+            for file in $files; do
+              echo "$file was changed"
+              for pattern in $PUBLISH_STREAMX_FILES_PATTERNS; do
+                echo "$pattern verification"
+              done
+            done
