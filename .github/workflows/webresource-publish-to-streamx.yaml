@@ -1,9 +1,10 @@
 name: Publish web resource to StreamX
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
-    branches:
-      - 'webresource/**'
+    branches:[ main ]
 
 jobs:
   get_files:
