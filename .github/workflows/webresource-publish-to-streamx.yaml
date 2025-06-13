@@ -1,0 +1,30 @@
+name: Publish web resource to StreamX
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  get_files:
+    name: run_on_pr_or_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+
+      - name: Modified files
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { execSync } = require('child_process')
+            const { commits } = context.payload.pull_request
+            const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
+            const files = rawFiles.split('\n').filter(Boolean)
+
+            console.log(files)
