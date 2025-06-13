@@ -54,7 +54,10 @@ jobs:
           for file in $changed_files; do
             echo "$file was changed"
             for pattern in $patterns; do
-              echo "Checking $file for pattern $p";
+              echo "Checking $file for pattern $pattern";
+              if [[ "$file" =~ "$pattern" ]]; then
+                echo "Sending $file to StreamX";
+              fi
             done
           done
 
