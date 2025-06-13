@@ -19,32 +19,37 @@ jobs:
           fetch-depth: 0
 
       - name: Publish modified files to StreamX
-        uses: actions/github-script@v6
-        with:
-          script: |
-            sleep 1s
-            DRY_RUN=${{ vars.DRY_RUN == 'true' ? true : false }}
-            if ($DRY_RUN) then
+        run: |
+          VARS_PUBLISH_STREAMX_FILES_PATTERNS="${{ vars.PUBLISH_STREAMX_FILES_PATTERNS }}";
+          VARS_DRY_RUN="${{ vars.DRY_RUN }}";
+
+          if [[ -z $VARS_PUBLISH_STREAMX_FILES_PATTERNS && $VARS_PUBLISH_STREAMX_FILES_PATTERNS == ""  ]]; then
+            echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.";
+            exit 1;
+          fi
+
+          sleep 1s
+          DRY_RUN=false;
+          if [[ ! -z $VARS_DRY_RUN && $VARS_DRY_RUN == "true" ]]; then
+            DRY_RUN=true;
+            if ( $DRY_RUN ); then
               echo "Dry run mode: enabled"
+              echo "--------------------------------------"
             fi
-            PUBLISH_STREAMX_FILES_PATTERNS="${{ vars.PUBLISH_STREAMX_FILES_PATTERNS}}";
-            if (PUBLISH_STREAMX_FILES_PATTERNS || PUBLISH_STREAMX_FILES_PATTERNS === "") {
-              console.log("Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.");
-              return;
-            }
-            echo "Accepted file patterns: $PUBLISH_STREAMX_FILES_PATTERNS"
-            echo "--------------------------------------"
-            console.log(context.payload.pull_request)
+          fi
 
-            const { execSync } = require('child_process')
-            const { commits } = context.payload.pull_request
-            const rawFiles = execSync(`git diff --name-only HEAD HEAD~${commits}`).toString()
-            const files = rawFiles.split('\n').filter(Boolean)
+          patterns=`echo "$VARS_PUBLISH_STREAMX_FILES_PATTERNS" | jq .[]`
+          echo "Accepted file patterns:"
+          echo "$patterns"
+          echo "--------------------------------------"
 
-            console.log(files)
-            for file in $files; do
-              echo "$file was changed"
-              for pattern in $PUBLISH_STREAMX_FILES_PATTERNS; do
-                echo "$pattern verification"
-              done
+          changed_files=$(`git diff --name-only HEAD HEAD~${context.payload.pull_request}`)
+
+          for file in $changed_files; do
+            echo "$file was changed"
+            for pattern in $patterns; do
+              echo "Checking $file for pattern $p";
             done
+          done
+
+        shell: bash
