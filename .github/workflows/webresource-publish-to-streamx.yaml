@@ -20,8 +20,8 @@ jobs:
 
       - name: Publish modified files to StreamX
         run: |
-          VARS_PUBLISH_STREAMX_FILES_PATTERNS="${{ vars.PUBLISH_STREAMX_FILES_PATTERNS }}";
-          VARS_DRY_RUN="${{ vars.DRY_RUN }}";
+          VARS_PUBLISH_STREAMX_FILES_PATTERNS='${{ vars.PUBLISH_STREAMX_FILES_PATTERNS }}';
+          VARS_DRY_RUN='${{ vars.DRY_RUN }}';
 
           if [[ -z $VARS_PUBLISH_STREAMX_FILES_PATTERNS && $VARS_PUBLISH_STREAMX_FILES_PATTERNS == ""  ]]; then
             echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.";
