@@ -45,11 +45,11 @@ jobs:
 
           echo "--------------------------------------"
           echo "--------------------------------------"
-          echo "${{ github }}"
+          echo "${{ github.event.commits }}"
           echo "--------------------------------------"
           echo "--------------------------------------"
 
-          changed_files=$(`git diff --name-only HEAD HEAD~${context.payload.pull_request}`)
+          changed_files=$(`git diff --name-only HEAD HEAD~"${{ github.event.commits }}"`)
 
           for file in $changed_files; do
             echo "$file was changed"
