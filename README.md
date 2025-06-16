@@ -16,6 +16,20 @@ Google Drive with docs: https://drive.google.com/drive/folders/1W8cTrBFYy6NyNmh3
 
 Install browser plugin as described here: https://www.aem.live/developer/tutorial#preview-and-publish-your-content
 
+Configure the plugin:
+- Go to the Google Drive from the `Docs with content` chapter
+- Right-click on the AEM Sidekick plugin to display its context menu
+- Click `Add this project`
+- You should see a confirmation message such as: `websight-rnd/puresight-demo successfully added`
+- Go to the main page of your chosen environment (out of those listed in the `Environments` chapter)
+- The browser may display `404 Not Found` as the page content, but continue with next steps
+- Click `Add this project` in the AEM Sidekick plugin
+- You should see a confirmation message such as: `streamx-dev/demo-puresight-eds-next successfully added`
+- Go back to the Google Drive folder
+- In the `Pick a project` area, pick the demo-puresight-eds environment you've just added to AEM Sidekick 
+- Edit and publish a blog file to validate the connection is working
+- Go to https://github.com/streamx-dev/demo-puresight-eds-next/actions and verify the `Publish to StreamX` action is triggered and passes
+
 ## Installation
 
 ```sh
@@ -93,13 +107,13 @@ Products blocks list:
 * Newsletter form
 * Metadata
 
-The products page take product id from metadata block (Product Id) and then fetch the JSON with procut ID. Example JSON file is [here](/data/products/B075X4VWF9.json)
+The products page take product id from metadata block (Product Id) and then fetch the JSON with procut ID. Example JSON file is [here](./data/products/B075X4VWF9.json)
 
 ---
 
 ### All JSON files
 
-* [/data/products/B075X4VWF9.json](/data/products/B075X4VWF9.json)
+* [./data/products/B075X4VWF9.json](./data/products/B075X4VWF9.json)
 
 ---
 
