@@ -38,9 +38,9 @@ jobs:
             fi
           fi
 
-          patterns=`echo "$VARS_PUBLISH_STREAMX_FILES_PATTERNS" | jq .[]`
+          PATTERNS=`echo "$VARS_PUBLISH_STREAMX_FILES_PATTERNS" | jq .[]`
           echo "Accepted file patterns:"
-          echo "$patterns"
+          echo "$PATTERNS"
           echo "--------------------------------------"
 
           echo "--------------------------------------"
@@ -49,14 +49,63 @@ jobs:
           echo "--------------------------------------"
           echo "--------------------------------------"
 
-          changed_files=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
+          CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
 
-          for file in $changed_files; do
-            echo "$file was changed"
-            for pattern in $patterns; do
-              echo "Checking $file for pattern $pattern";
-              if [[ "$file" =~ "$pattern" ]]; then
-                echo "Sending $file to StreamX";
+          for FILE_PATH in $CHANGED_FILES; do
+            echo "$FILE_PATH was changed"
+            for PATTERN in $PATTERNS; do
+              echo "Checking $FILE_PATH for pattern $PATTERN";
+              if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
+                if ( $DRY_RUN ); then
+                  echo "Sending $FILE_PATH to StreamX";
+                  EDS_URL="${{ vars.EDS_DOMAIN_URL }}$FILE_PATH"
+                  echo "Resource URL: $EDS_URL"
+                  edsResponseCode=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_URL)
+                  echo "Status code: ${edsResponseCode}"
+                  resourceData=$(cat eds_response.txt | jq . -sR)
+                  echo "Resource data: $resourceData"
+                  if [ $edsResponseCode != 200 ]; then
+                    echo "Cannot fetch resource from EDS. Status code is $edsResponseCode"
+                    exit 1
+                  fi
+                  streamxApi=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
+                  streamxKey="$EDS_URL"
+                  echo "StreamX URL: $streamxApi key: $streamxKey"
+                  streamxResponseCode=$(curl -i -X POST $streamxApi \
+                    --write-out %{http_code} \
+                    --insecure \
+                    --output streamx_response.txt \
+                    -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
+                    -H "Content-Type: application/json" \
+                    -d "{
+                      \"key\" : \"$streamxKey\",
+                      \"action\" : \"publish\",
+                      \"eventTime\" : null,
+                      \"properties\" : {
+                        \"sx:type\": \"page/blog\"
+                      },
+                      \"payload\" : {
+                        \"dev.streamx.blueprints.data.Page\" : {
+                        \"content\" : {
+                          \"bytes\" : $pageHtml
+                        }
+                      }
+                    }
+                  }");
+                  echo -e "StreamX response:\n$(cat streamx_response.txt)"
+                  if [ $streamxResponseCode != 202 ]; then
+                    echo "Cannot publish to StreamX. Status code is: $streamxResponseCode"
+                    exit 1
+                  fi
+                  json_content=$(cat streamx_response.txt)
+                  success=$(echo "$json_content" | grep -o '"success": *{[^}]*}')
+                  if [[ -z "$success" ]]; then
+                    echo "Response does not contain success status"
+                    exit 1
+                  fi
+                else
+                  echo "File $FILE_PATH did match the pattern config. DRY RUN enabled.";
+                fi
               fi
             done
           done
