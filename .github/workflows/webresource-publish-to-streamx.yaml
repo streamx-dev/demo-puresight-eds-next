@@ -60,49 +60,51 @@ jobs:
                   echo "Sending $FILE_PATH to StreamX";
                   EDS_URL="${{ vars.EDS_DOMAIN_URL }}$FILE_PATH"
                   echo "Resource URL: $EDS_URL"
-                  edsResponseCode=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_URL)
-                  echo "Status code: ${edsResponseCode}"
-                  resourceData=$(cat eds_response.txt | jq . -sR)
-                  echo "Resource data: $resourceData"
-                  if [ $edsResponseCode != 200 ]; then
-                    echo "Cannot fetch resource from EDS. Status code is $edsResponseCode"
+                  EDS_RESPONSE_CODE=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_URL)
+                  echo "Status code: ${EDS_RESPONSE_CODE}"
+                  RESOURCE_DATA=$(cat eds_response.txt | jq . -sR)
+                  echo "Resource data: $RESOURCE_DATA"
+                  if [ $EDS_RESPONSE_CODE != 200 ]; then
+                    echo "Cannot fetch resource from EDS. Status code is $EDS_RESPONSE_CODE"
                     exit 1
                   fi
-                  streamxApi=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
-                  streamxKey="$EDS_URL"
-                  echo "StreamX URL: $streamxApi key: $streamxKey"
-                  streamxResponseCode=$(curl -i -X POST $streamxApi \
+                  STREAMX_API=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
+                  STREAMX_KEY="$EDS_URL"
+                  echo "StreamX URL: $STREAMX_API key: $STREAMX_KEY"
+                  STREAMX_RESPONSE_CODE=$(curl -i -X POST $STREAMX_API \
                     --write-out %{http_code} \
                     --insecure \
                     --output streamx_response.txt \
                     -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
                     -H "Content-Type: application/json" \
                     -d "{
-                      \"key\" : \"$streamxKey\",
+                      \"key\" : \"$STREAMX_KEY\",
                       \"action\" : \"publish\",
                       \"eventTime\" : null,
                       \"properties\" : {
-                        \"sx:type\": \"page/blog\"
+                        \"sx:type\": \"web-resource/static\"
                       },
                       \"payload\" : {
                         \"dev.streamx.blueprints.data.Page\" : {
                         \"content\" : {
-                          \"bytes\" : $pageHtml
+                          \"bytes\" : $RESOURCE_DATA
                         }
                       }
                     }
                   }");
                   echo -e "StreamX response:\n$(cat streamx_response.txt)"
-                  if [ $streamxResponseCode != 202 ]; then
-                    echo "Cannot publish to StreamX. Status code is: $streamxResponseCode"
+                  if [ $STREAMX_RESPONSE_CODE != 202 ]; then
+                    echo "Cannot publish to StreamX. Status code is: $STREAMX_RESPONSE_CODE"
                     exit 1
                   fi
-                  json_content=$(cat streamx_response.txt)
-                  success=$(echo "$json_content" | grep -o '"success": *{[^}]*}')
-                  if [[ -z "$success" ]]; then
+                  JSON_CONTENT=$(cat streamx_response.txt)
+                  SUCCESS=$(echo "$JSON_CONTENT" | grep -o '"success": *{[^}]*}')
+                  if [[ -z "$SUCCESS" ]]; then
                     echo "Response does not contain success status"
                     exit 1
                   fi
+                  rm eds_response.txt;
+                  rm streamx_response.txt;
                 else
                   echo "File $FILE_PATH did match the pattern config. DRY RUN enabled.";
                 fi
