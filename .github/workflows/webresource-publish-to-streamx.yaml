@@ -156,7 +156,7 @@ jobs:
             echo "--------------------------------------"
             echo "Checking file $FILE_PATH"
             for PATTERN in $PATTERNS; do
-              echo "Matching $FILE_PATH for pattern $PATTERN";
+              echo "Matching $FILE_PATH for pattern '$PATTERN'";
               if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
                 echo "Accepted file $FILE_PATH - did match the pattern config.";
                 if ( $DRY_RUN ); then
