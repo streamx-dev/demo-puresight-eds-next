@@ -73,17 +73,19 @@ jobs:
           echo "--------------------------------------"
 
           for FILE_PATH in $CHANGED_FILES; do
-            echo "$FILE_PATH was changed"
+            echo "--------------------------------------"
+            echo "Checking file $FILE_PATH"
             for PATTERN in $PATTERNS; do
-              echo "Checking $FILE_PATH for pattern $PATTERN";
+              echo "Matching $FILE_PATH for pattern $PATTERN";
               if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
+                echo "Accepted file $FILE_PATH - did match the pattern config.";
                 if ( $DRY_RUN ); then
                   echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
                   streamx publish --ingestion-url=${{ vars.STREAMX_INGESTION_BASE_URL }} web-resources $FILE_PATH -b $FILE_PATH
                 fi
               else
-                echo "File $FILE_PATH did match the pattern config.";
+                echo "Rejected file $FILE_PATH - did match the pattern config.";
               fi
             done
           done
