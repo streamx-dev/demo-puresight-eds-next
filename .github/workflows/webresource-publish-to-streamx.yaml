@@ -90,7 +90,7 @@ jobs:
         shell: bash
 
   publish-all:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.publish_all_webresources == true
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_all_webresources == true
     name: run_on_manual_trigger
     runs-on: ubuntu-latest
     steps:
