@@ -1,20 +1,21 @@
 import {
-  decorateBlocks,
+  sampleRUM,
+  loadHeader,
+  loadFooter,
   decorateButtons,
   decorateIcons,
   decorateSections,
+  decorateBlocks,
   decorateTemplateAndTheme,
-  getMetadata,
+  waitForLCP,
   loadBlocks,
   loadCSS,
-  loadFooter,
-  loadHeader,
-  sampleRUM,
-  waitForLCP,
+  getMetadata,
 } from './aem.js';
-import {loadTemplate} from './commons.js';
+import { loadTemplate } from './commons.js';
 
 const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
+
 const loadDependenciesLibs = async () => {
   window.KYANITE_ON_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
   window.KYANITE_ON_DOM_CONTENT_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
