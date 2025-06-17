@@ -136,11 +136,12 @@ Workflows require few configuration options defined as variables and secrets:
 
 - Variable `EDS_DOMAIN_URL`: a URL to Edge Delivery Services domain,
   e.g.: `https://main--demo-puresight-eds-next--streamx-dev.hlx.live`.
+- Variable `STREAMX_PUBLICACTION_BASE_URL`: a base URL to StreamX publication API,
+  e.g.: `https://ingestion.streamx.tech`.
 - Variable `STREAMX_PAGE_PUBLICATION_API`: a URL to StreamX publication API,
   e.g.: `https://ingestion.streamx.tech/publications/v1/channels/pages/messages`.
-- Variable `STREAMX_STATIC_WEB_RESOURCE_PUBLICATION_API`: a URL to StreamX publication API for
-  static web resources,
-  e.g.: `https://ingestion.streamx.tech/publications/v1/channels/web-resources/messages`.
+- Variable `STREAMX_INGESTION_WEBRESOURCE_INCLUDES`: a path patterns list of accepted webresources,
+  e.g.: `["scripts/*.js", "styles/*.css"]`.
 - Secret `STREAMX_TOKEN`: JWT value required by StreamX publication API.
 
 Both workflows can be
