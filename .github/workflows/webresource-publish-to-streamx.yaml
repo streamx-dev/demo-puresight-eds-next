@@ -67,7 +67,7 @@ jobs:
 
           CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
 
-          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq .[]`
+          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
           echo "Accepted file patterns:"
           echo "$PATTERNS"
           echo "--------------------------------------"
@@ -147,7 +147,7 @@ jobs:
 
           CHANGED_FILES=`find * -type f`
 
-          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq .[]`
+          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
           echo "Accepted file patterns:"
           echo "$PATTERNS"
           echo "--------------------------------------"
