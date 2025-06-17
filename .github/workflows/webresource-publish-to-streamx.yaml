@@ -1,6 +1,13 @@
-name: Publish web resource to StreamX
+name: Publish web resources to StreamX
 
 on:
+  workflow_dispatch:
+    inputs:
+      publish_all_webresources:
+        description: "Publish all, pattern included webresources to StreamX"
+        required: false
+        type: boolean
+        default: false
   pull_request:
     types:
       - closed
@@ -12,44 +19,58 @@ jobs:
     if: github.event.pull_request.merged == true
     name: run_on_pr_merged
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@master
         with:
           fetch-depth: 0
 
-      - name: Publish modified files to StreamX
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Set up homebrew
+        uses: 'Homebrew/actions/setup-homebrew@master'
+
+      - name: Install StreamX via Homebrew
         run: |
-          VARS_PUBLISH_STREAMX_FILES_PATTERNS='${{ vars.PUBLISH_STREAMX_FILES_PATTERNS }}';
+          brew install streamx-dev/preview-tap/streamx
+
+      - name: Publish modified, pattern included webresources to StreamX
+        env:
+          STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
+        run: |
+          if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
+            echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
+            exit 1
+          fi
+
+          VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES='${{ vars.STREAMX_INGESTION_WEBRESOURCE_INCLUDES }}';
           VARS_DRY_RUN='${{ vars.DRY_RUN }}';
 
-          if [[ -z $VARS_PUBLISH_STREAMX_FILES_PATTERNS && $VARS_PUBLISH_STREAMX_FILES_PATTERNS == ""  ]]; then
+          if [[ -z $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES || $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES == ""  ]]; then
             echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.";
             exit 1;
           fi
 
-          sleep 1s
+          sleep 1s;
           DRY_RUN=false;
           if [[ ! -z $VARS_DRY_RUN && $VARS_DRY_RUN == "true" ]]; then
             DRY_RUN=true;
             if ( $DRY_RUN ); then
               echo "Dry run mode: enabled"
-              echo "--------------------------------------"
             fi
           fi
 
-          PATTERNS=`echo "$VARS_PUBLISH_STREAMX_FILES_PATTERNS" | jq .[]`
+          CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
+
+          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq .[]`
           echo "Accepted file patterns:"
           echo "$PATTERNS"
           echo "--------------------------------------"
-
-          echo "--------------------------------------"
-          echo "--------------------------------------"
-          echo "${{ github.event.pull_request.commits }}"
-          echo "--------------------------------------"
-          echo "--------------------------------------"
-
-          CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
 
           for FILE_PATH in $CHANGED_FILES; do
             echo "$FILE_PATH was changed"
@@ -57,57 +78,90 @@ jobs:
               echo "Checking $FILE_PATH for pattern $PATTERN";
               if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
                 if ( $DRY_RUN ); then
-                  echo "Sending $FILE_PATH to StreamX";
-                  EDS_URL="${{ vars.EDS_DOMAIN_URL }}$FILE_PATH"
-                  echo "Resource URL: $EDS_URL"
-                  EDS_RESPONSE_CODE=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_URL)
-                  echo "Status code: ${EDS_RESPONSE_CODE}"
-                  RESOURCE_DATA=$(cat eds_response.txt | jq . -sR)
-                  echo "Resource data: $RESOURCE_DATA"
-                  if [ $EDS_RESPONSE_CODE != 200 ]; then
-                    echo "Cannot fetch resource from EDS. Status code is $EDS_RESPONSE_CODE"
-                    exit 1
-                  fi
-                  STREAMX_API=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
-                  STREAMX_KEY="$EDS_URL"
-                  echo "StreamX URL: $STREAMX_API key: $STREAMX_KEY"
-                  STREAMX_RESPONSE_CODE=$(curl -i -X POST $STREAMX_API \
-                    --write-out %{http_code} \
-                    --insecure \
-                    --output streamx_response.txt \
-                    -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
-                    -H "Content-Type: application/json" \
-                    -d "{
-                      \"key\" : \"$STREAMX_KEY\",
-                      \"action\" : \"publish\",
-                      \"eventTime\" : null,
-                      \"properties\" : {
-                        \"sx:type\": \"web-resource/static\"
-                      },
-                      \"payload\" : {
-                        \"dev.streamx.blueprints.data.Page\" : {
-                        \"content\" : {
-                          \"bytes\" : $RESOURCE_DATA
-                        }
-                      }
-                    }
-                  }");
-                  echo -e "StreamX response:\n$(cat streamx_response.txt)"
-                  if [ $STREAMX_RESPONSE_CODE != 202 ]; then
-                    echo "Cannot publish to StreamX. Status code is: $STREAMX_RESPONSE_CODE"
-                    exit 1
-                  fi
-                  JSON_CONTENT=$(cat streamx_response.txt)
-                  SUCCESS=$(echo "$JSON_CONTENT" | grep -o '"success": *{[^}]*}')
-                  if [[ -z "$SUCCESS" ]]; then
-                    echo "Response does not contain success status"
-                    exit 1
-                  fi
-                  rm eds_response.txt;
-                  rm streamx_response.txt;
+                  echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
-                  echo "File $FILE_PATH did match the pattern config. DRY RUN enabled.";
+                  streamx publish --ingestion-url=${{ vars.STREAMX_INGESTION_BASE_URL }} web-resources $FILE_PATH -b $FILE_PATH
                 fi
+              else
+                echo "File $FILE_PATH did match the pattern config.";
+              fi
+            done
+          done
+        shell: bash
+
+  publish-all:
+    if: github.event_name == 'workflow_dispatch'
+    name: run_on_manual_trigger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Set up homebrew
+        uses: 'Homebrew/actions/setup-homebrew@master'
+
+      - name: Install StreamX via Homebrew
+        run: |
+          brew install streamx-dev/preview-tap/streamx
+
+      - name: Publish all, pattern included webresources to StreamX
+        env:
+          STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
+        run: |
+          if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
+            echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
+            exit 1
+          fi
+
+          VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES='${{ vars.STREAMX_INGESTION_WEBRESOURCE_INCLUDES }}';
+          VARS_DRY_RUN='${{ vars.DRY_RUN }}';
+
+          if [[ -z $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES || $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES == ""  ]]; then
+            echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.";
+            exit 1;
+          fi
+
+          sleep 1s;
+          DRY_RUN=false;
+          if [[ ! -z $VARS_DRY_RUN && $VARS_DRY_RUN == "true" ]]; then
+            DRY_RUN=true;
+            if ( $DRY_RUN ); then
+              echo "Dry run mode: enabled"
+            fi
+          fi
+
+          echo "--------------------------------------"
+          echo ls -la;
+          echo "--------------------------------------"
+
+
+          CHANGED_FILES=`find * -type f`
+
+          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq .[]`
+          echo "Accepted file patterns:"
+          echo "$PATTERNS"
+          echo "--------------------------------------"
+
+          for FILE_PATH in $CHANGED_FILES; do
+            echo "$FILE_PATH was changed"
+            for PATTERN in $PATTERNS; do
+              echo "Checking $FILE_PATH for pattern $PATTERN";
+              if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
+                if ( $DRY_RUN ); then
+                  echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
+                else
+                  streamx publish --ingestion-url=${{ vars.STREAMX_INGESTION_BASE_URL }} web-resources $FILE_PATH -b $FILE_PATH
+                fi
+              else
+                echo "File $FILE_PATH did match the pattern config.";
               fi
             done
           done
