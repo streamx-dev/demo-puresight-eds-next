@@ -1,18 +1,18 @@
 import {
-  sampleRUM,
-  loadHeader,
-  loadFooter,
+  decorateBlocks,
   decorateButtons,
   decorateIcons,
   decorateSections,
-  decorateBlocks,
   decorateTemplateAndTheme,
-  waitForLCP,
+  getMetadata,
   loadBlocks,
   loadCSS,
-  getMetadata,
+  loadFooter,
+  loadHeader,
+  sampleRUM,
+  waitForLCP,
 } from './aem.js';
-import { loadTemplate } from './commons.js';
+import {loadTemplate} from './commons.js';
 
 const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
 const loadDependenciesLibs = async () => {
@@ -154,4 +154,7 @@ async function loadPage() {
   loadDelayed();
 }
 
+/**
+ * Load page.
+ */
 loadPage();

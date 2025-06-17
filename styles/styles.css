@@ -141,8 +141,11 @@ main > .section > *,
   height: 96px;
 }
 
+/* ----------------------------------- */
 /* Cumulative Layout Shift Improvments */
+/* ----------------------------------- */
 body > header {
   height: var(--nav-height);
   max-height: var(--nav-height);
 }
+

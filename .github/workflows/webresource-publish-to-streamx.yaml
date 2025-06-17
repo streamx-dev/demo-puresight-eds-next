@@ -1,0 +1,115 @@
+name: Publish web resource to StreamX
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  publish-if-merged:
+    if: github.event.pull_request.merged == true
+    name: run_on_pr_merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+
+      - name: Publish modified files to StreamX
+        run: |
+          VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES='${{ vars.STREAMX_INGESTION_WEBRESOURCE_INCLUDES }}';
+          VARS_DRY_RUN='${{ vars.DRY_RUN }}';
+
+          if [[ -z $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES && $VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES == ""  ]]; then
+            echo "Missing file patterns variable [PUBLISH_STREAMX_FILES_PATTERNS]. Execution skipped.";
+            exit 1;
+          fi
+
+          sleep 1s
+          DRY_RUN=false;
+          if [[ ! -z $VARS_DRY_RUN && $VARS_DRY_RUN == "true" ]]; then
+            DRY_RUN=true;
+            if ( $DRY_RUN ); then
+              echo "Dry run mode: enabled"
+              echo "--------------------------------------"
+            fi
+          fi
+
+          PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq .[]`
+          echo "Accepted file patterns:"
+          echo "$PATTERNS"
+          echo "--------------------------------------"
+
+          echo "--------------------------------------"
+          echo "--------------------------------------"
+          echo "${{ github.event.pull_request.commits }}"
+          echo "--------------------------------------"
+          echo "--------------------------------------"
+
+          CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
+
+          for FILE_PATH in $CHANGED_FILES; do
+            echo "$FILE_PATH was changed"
+            for PATTERN in $PATTERNS; do
+              echo "Checking $FILE_PATH for pattern $PATTERN";
+              if [[ "$FILE_PATH" =~ "$PATTERN" ]]; then
+                if ( $DRY_RUN ); then
+                  echo "Sending $FILE_PATH to StreamX";
+                  EDS_URL="${{ vars.EDS_DOMAIN_URL }}$FILE_PATH"
+                  echo "Resource URL: $EDS_URL"
+                  EDS_RESPONSE_CODE=$(curl --write-out %{http_code} --silent --output eds_response.txt $EDS_URL)
+                  echo "Status code: ${EDS_RESPONSE_CODE}"
+                  RESOURCE_DATA=$(cat eds_response.txt | jq . -sR)
+                  echo "Resource data: $RESOURCE_DATA"
+                  if [ $EDS_RESPONSE_CODE != 200 ]; then
+                    echo "Cannot fetch resource from EDS. Status code is $EDS_RESPONSE_CODE"
+                    exit 1
+                  fi
+                  STREAMX_API=${{ vars.STREAMX_INGESTION_BASE_URL }}/ingestion/v1/channels/web-resources/messages
+                  STREAMX_KEY="$EDS_URL"
+                  echo "StreamX URL: $STREAMX_API key: $STREAMX_KEY"
+                  STREAMX_RESPONSE_CODE=$(curl -i -X POST $STREAMX_API \
+                    --write-out %{http_code} \
+                    --insecure \
+                    --output streamx_response.txt \
+                    -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
+                    -H "Content-Type: application/json" \
+                    -d "{
+                      \"key\" : \"$STREAMX_KEY\",
+                      \"action\" : \"publish\",
+                      \"eventTime\" : null,
+                      \"properties\" : {
+                        \"sx:type\": \"web-resource/static\"
+                      },
+                      \"payload\" : {
+                        \"dev.streamx.blueprints.data.Page\" : {
+                        \"content\" : {
+                          \"bytes\" : $RESOURCE_DATA
+                        }
+                      }
+                    }
+                  }");
+                  echo -e "StreamX response:\n$(cat streamx_response.txt)"
+                  if [ $STREAMX_RESPONSE_CODE != 202 ]; then
+                    echo "Cannot publish to StreamX. Status code is: $STREAMX_RESPONSE_CODE"
+                    exit 1
+                  fi
+                  JSON_CONTENT=$(cat streamx_response.txt)
+                  SUCCESS=$(echo "$JSON_CONTENT" | grep -o '"success": *{[^}]*}')
+                  if [[ -z "$SUCCESS" ]]; then
+                    echo "Response does not contain success status"
+                    exit 1
+                  fi
+                  rm eds_response.txt;
+                  rm streamx_response.txt;
+                else
+                  echo "File $FILE_PATH did match the pattern config. DRY RUN enabled.";
+                fi
+              fi
+            done
+          done
+
+        shell: bash
