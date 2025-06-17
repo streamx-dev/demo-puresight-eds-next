@@ -68,7 +68,7 @@ jobs:
                     echo "Cannot fetch resource from EDS. Status code is $EDS_RESPONSE_CODE"
                     exit 1
                   fi
-                  STREAMX_API=${{ vars.STREAMX_INGESTION_BASE_URL }}/ingestion/v1/channels/web-resources/messages
+                  STREAMX_API="${{ vars.STREAMX_INGESTION_BASE_URL }}/ingestion/v1/channels/web-resources/messages"
                   STREAMX_KEY="$EDS_URL"
                   echo "StreamX URL: $STREAMX_API key: $STREAMX_KEY"
                   STREAMX_RESPONSE_CODE=$(curl -i -X POST $STREAMX_API \
