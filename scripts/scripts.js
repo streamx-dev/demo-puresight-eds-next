@@ -154,7 +154,4 @@ async function loadPage() {
   loadDelayed();
 }
 
-/**
- * Load page.
- */
 loadPage();
