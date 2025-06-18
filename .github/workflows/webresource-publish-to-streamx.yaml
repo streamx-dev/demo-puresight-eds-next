@@ -87,7 +87,8 @@ jobs:
                   echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
                   echo "Sending $FILE_PATH to StreamX";
-                  streamx --accept-license publish --ingestion-url="$STREAMX_INGESTION_BASE_URL" web-resources $FILE_PATH -b $FILE_PATH
+                  webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
+                  streamx publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
                 fi
               fi
             done
@@ -165,7 +166,8 @@ jobs:
                   echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
                   echo "Sending $FILE_PATH to StreamX";
-                  streamx --accept-license publish --ingestion-url="$STREAMX_INGESTION_BASE_URL" web-resources $FILE_PATH -b $FILE_PATH
+                  webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
+                  streamx publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
                 fi
               fi
             done
