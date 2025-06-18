@@ -42,9 +42,14 @@ jobs:
       - name: Publish modified, pattern included webresources to StreamX
         env:
           STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
+          STREAMX_INGESTION_BASE_URL: ${{ vars.STREAMX_INGESTION_BASE_URL }}
         run: |
           if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
             echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
+            exit 1
+          fi
+          if [ -z "$STREAMX_INGESTION_BASE_URL" ]; then
+            echo "Error: STREAMX_INGESTION_BASE_URL is not set. Please configure the GitHub variables."
             exit 1
           fi
 
@@ -82,7 +87,7 @@ jobs:
                   echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
                   echo "Sending $FILE_PATH to StreamX";
-                  streamx publish --ingestion-url=${{ vars.STREAMX_INGESTION_BASE_URL }} web-resources $FILE_PATH -b $FILE_PATH
+                  streamx publish --ingestion-url="$STREAMX_INGESTION_BASE_URL" web-resources $FILE_PATH -b $FILE_PATH
                 fi
               fi
             done
@@ -115,9 +120,14 @@ jobs:
       - name: Publish all, pattern included webresources to StreamX
         env:
           STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
+          STREAMX_INGESTION_BASE_URL: ${{ vars.STREAMX_INGESTION_BASE_URL }}
         run: |
           if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
             echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
+            exit 1
+          fi
+          if [ -z "$STREAMX_INGESTION_BASE_URL" ]; then
+            echo "Error: STREAMX_INGESTION_BASE_URL is not set. Please configure the GitHub variables."
             exit 1
           fi
 
@@ -155,10 +165,9 @@ jobs:
                   echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
                 else
                   echo "Sending $FILE_PATH to StreamX";
-                  streamx publish --ingestion-url=${{ vars.STREAMX_INGESTION_BASE_URL }} web-resources $FILE_PATH -b $FILE_PATH
+                  streamx publish --ingestion-url="$STREAMX_INGESTION_BASE_URL" web-resources $FILE_PATH -b $FILE_PATH
                 fi
               fi
             done
           done
-
         shell: bash
