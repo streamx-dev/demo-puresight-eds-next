@@ -88,7 +88,7 @@ jobs:
                 else
                   echo "Sending $FILE_PATH to StreamX";
                   webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
-                  streamx publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+                  streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
                 fi
               fi
             done
@@ -167,7 +167,7 @@ jobs:
                 else
                   echo "Sending $FILE_PATH to StreamX";
                   webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
-                  streamx publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+                  streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
                 fi
               fi
             done
