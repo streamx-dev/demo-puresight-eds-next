@@ -108,6 +108,10 @@ jobs:
 
           ls -la;
 
+          git status;
+          git reflog;
+          git fsck;
+
           CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
           streamx_action $CHANGED_FILES publish;
 
