@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-        with:
-          fetch-depth: 1
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -123,8 +121,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-        with:
-          fetch-depth: 1
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
