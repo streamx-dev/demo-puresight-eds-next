@@ -70,29 +70,50 @@ jobs:
             fi
           fi
 
-          CHANGED_FILES=$(git diff --name-only HEAD HEAD~${{ github.event.pull_request.commits }})
-
           PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
           echo "Accepted file patterns:"
           echo "$PATTERNS"
           echo "--------------------------------------"
 
-          for FILE_PATH in $CHANGED_FILES; do
-            echo "--------------------------------------"
-            echo "Checking file $FILE_PATH"
-            for FILE_PATTERN in $PATTERNS; do
-              if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
-                echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
-                if ( $DRY_RUN ); then
-                  echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
-                else
-                  echo "Sending $FILE_PATH to StreamX";
-                  webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
-                  streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+          streamx_action() {
+            local FILES=$1;
+            local ACTION=$2;
+            for FILE_PATH in $FILES; do
+              echo "--------------------------------------"
+              echo "Checking file $FILE_PATH"
+              for FILE_PATTERN in $PATTERNS; do
+                if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
+                  echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
+                  if ( $DRY_RUN ); then
+                    echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
+                  else
+                    case "$ACTION" in
+                      "publish")
+                        echo "Publishing $FILE_PATH to StreamX";
+                        webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
+                        streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+                        ;;
+                      "unpublish")
+                        echo "Unpublishing $FILE_PATH from StreamX";
+                        streamx unpublish web-resources "$FILE_PATH"
+                        ;;
+                      *)
+                        echo "Only publish / unpublish options are supported."
+                        exit 1
+                        ;;
+                    esac
+                  fi
                 fi
-              fi
+              done
             done
-          done
+          }
+
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }})
+          streamx_action $CHANGED_FILES publish;
+
+          REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }})
+          streamx_action $CHANGED_FILES publish;
+
         shell: bash
 
   publish-all:
@@ -149,27 +170,45 @@ jobs:
             fi
           fi
 
-          CHANGED_FILES=`find * -type f`
-
           PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
           echo "Accepted file patterns:"
           echo "$PATTERNS"
           echo "--------------------------------------"
 
-          for FILE_PATH in $CHANGED_FILES; do
-            echo "--------------------------------------"
-            echo "Checking file $FILE_PATH"
-            for FILE_PATTERN in $PATTERNS; do
-              if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
-                echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
-                if ( $DRY_RUN ); then
-                  echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
-                else
-                  echo "Sending $FILE_PATH to StreamX";
-                  webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
-                  streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+          streamx_action() {
+            local FILES=$1;
+            local ACTION=$2;
+            for FILE_PATH in $FILES; do
+              echo "--------------------------------------"
+              echo "Checking file $FILE_PATH"
+              for FILE_PATTERN in $PATTERNS; do
+                if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
+                  echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
+                  if ( $DRY_RUN ); then
+                    echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
+                  else
+                    case "$ACTION" in
+                      "publish")
+                        echo "Publishing $FILE_PATH to StreamX";
+                        webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
+                        streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+                        ;;
+                      "unpublish")
+                        echo "Unpublishing $FILE_PATH from StreamX";
+                        streamx unpublish web-resources "$FILE_PATH"
+                        ;;
+                      *)
+                        echo "Only publish / unpublish options are supported."
+                        exit 1
+                        ;;
+                    esac
+                  fi
                 fi
-              fi
+              done
             done
-          done
+          }
+
+          CHANGED_FILES=`find * -type f`
+          streamx_action $CHANGED_FILES publish;
+
         shell: bash
