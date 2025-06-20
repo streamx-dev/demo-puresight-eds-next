@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -105,12 +105,13 @@ jobs:
               done
             done
           }
+          ls -la;
 
-          CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }})
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
           streamx_action $CHANGED_FILES publish;
 
-          REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }})
-          streamx_action $CHANGED_FILES publish;
+          REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }});
+          streamx_action $REMOVED_FILES unpublish;
 
         shell: bash
 
@@ -120,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
