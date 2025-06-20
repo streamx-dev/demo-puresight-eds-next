@@ -109,10 +109,14 @@ jobs:
           }
 
           CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
-          streamx_action $CHANGED_FILES publish;
+          if [ -n "$CHANGED_FILES" ]; then
+            streamx_action $CHANGED_FILES publish;
+          fi
 
           REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }});
-          streamx_action $REMOVED_FILES unpublish;
+          if [ -n "$REMOVED_FILES" ]; then
+            streamx_action $REMOVED_FILES unpublish;
+          fi
 
         shell: bash
 
@@ -207,6 +211,8 @@ jobs:
           }
 
           CHANGED_FILES=`find * -type f`
-          streamx_action $CHANGED_FILES publish;
+          if [ -n "$CHANGED_FILES" ]; then
+            streamx_action $CHANGED_FILES publish;
+          fi
 
         shell: bash
