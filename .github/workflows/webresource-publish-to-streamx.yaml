@@ -105,6 +105,7 @@ jobs:
               done
             done
           }
+
           ls -la;
 
           CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
