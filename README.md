@@ -123,22 +123,40 @@ Spreadsheets with [articles](https://docs.google.com/spreadsheets/d/1BlG-jJboqjo
 
 ## Publication to StreamX
 
-There are two GitHub workflows which make it possible to publish and unpublish pages to/from
-StreamX:
+StreamX currently supports two types of content sources, each with its own set of GitHub workflows.
+Depending on the content source and the action performed, the appropriate workflow is triggered
+automatically to publish or unpublish content.
+
+### 1. EDS Workflows
+
+These workflows handle publishing and unpublishing pages via Edge Delivery Services (EDS):
 
 - [publish-to-streamx.yaml](.github/workflows/publish-to-streamx.yaml)
 - [unpublish-from-streamx.yaml](.github/workflows/unpublish-from-streamx.yaml)
 
-Once page is publish or unpublished a relevant workflow will be triggered automatically and make a
-call to StreamX instance.
+When a page is published or unpublished, the corresponding workflow is triggered automatically
+and sends a request to the StreamX instance.
 
-Workflows require few configuration options defined as variables and secrets:
+### 2. Helix Workflows
+
+This workflow handles publishing of web resources via Helix:
+
+- [webresource-publish-to-streamx.yaml](.github/workflows/webresource-publish-to-streamx.yaml)
+
+When a pull request is merged into the `main` branch, the web resource synchronization workflow is triggered.
+
+### Configuration Requirements
+The workflows require several configuration options, defined as variables and secrets:
 
 - Variable `EDS_DOMAIN_URL`: a URL to Edge Delivery Services domain,
   e.g.: `https://main--demo-puresight-eds-next--streamx-dev.hlx.live`.
+- Variable `STREAMX_PUBLICACTION_BASE_URL`: a base URL to StreamX publication API,
+  e.g.: `https://ingestion.streamx.tech`.
 - Variable `STREAMX_PAGE_PUBLICATION_API`: a URL to StreamX publication API,
   e.g.: `https://ingestion.streamx.tech/publications/v1/channels/pages/messages`.
+- Variable `STREAMX_INGESTION_WEBRESOURCE_INCLUDES`: a path patterns list of accepted webresources,
+  e.g.: `["scripts/*.js", "styles/*.css"]`.
 - Secret `STREAMX_TOKEN`: JWT value required by StreamX publication API.
 
-Both workflows can be
+Workflows can be
 [enabled and disabled manually in GitHub](https://docs.github.com/en/actions/using-workflows/disabling-and-enabling-a-workflow).
