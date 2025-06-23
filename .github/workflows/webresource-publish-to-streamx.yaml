@@ -1,4 +1,19 @@
-name: Publish web resources to StreamX
+name: Publish/Unpublish web resources on StreamX
+
+# Description:
+# This workflow handles the publishing and unpublishing of web resources that are part of a merged pull request.
+# Only resources that match a configurable pattern are accepted and processed.
+# The pattern is defined in the configuration variable STREAMX_INGESTION_WEBRESOURCE_INCLUDES.
+# Example: STREAMX_INGESTION_WEBRESOURCE_INCLUDES = ["scripts/*.js", "styles/*.css"]
+#
+# In addition triggering this workflow manually we will start full import procedure.
+# All files from given branch that pass pattern verification will get published into
+# StreamX platform.
+#
+# Prerequisites:
+# Following variables need to be configured:
+#   * STREAMX_INGESTION_BASE_URL (variable) - StreamX ingestion endpoint
+#   * STREAMX_TOKEN (secret) - StreamX access token
 
 on:
   workflow_dispatch:
