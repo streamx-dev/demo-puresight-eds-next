@@ -78,6 +78,11 @@ jobs:
             local ACTION=$1;
             shift;
             local FILES=("$@");
+            echo "--------------------------------------";
+            echo "action: $ACTION";
+            echo "--------------------------------------";
+            echo "files: $FILES";
+            echo "--------------------------------------";
             for FILE_PATH in $FILES; do
               echo "--------------------------------------"
               echo "Checking file $FILE_PATH"
