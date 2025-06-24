@@ -114,7 +114,7 @@ jobs:
           }
 
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
-            CHANGED_FILES=`find * -type f`
+            CHANGED_FILES=$(find * -type f)
             if [ -n "$CHANGED_FILES" ]; then
               streamx_action publish $CHANGED_FILES;
             fi
