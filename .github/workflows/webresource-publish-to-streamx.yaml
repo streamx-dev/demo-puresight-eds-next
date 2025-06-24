@@ -43,8 +43,6 @@ jobs:
           STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
           STREAMX_INGESTION_BASE_URL: ${{ vars.STREAMX_INGESTION_BASE_URL }}
         run: |
-          source .github/workflows/scripts/streamx.sh
-
           if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
             echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
             exit 1
@@ -72,20 +70,56 @@ jobs:
           fi
 
           PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
+          echo "Accepted file patterns:"
+          echo "$PATTERNS"
+          echo "--------------------------------------"
+
+          streamx_action() {
+            local FILES=$1;
+            local ACTION=$2;
+            for FILE_PATH in $FILES; do
+              echo "--------------------------------------"
+              echo "Checking file $FILE_PATH"
+              for FILE_PATTERN in $PATTERNS; do
+                if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
+                  echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
+                  if ( $DRY_RUN ); then
+                    echo "Sending $FILE_PATH to StreamX - SKIPPED - dry run mode enabled";
+                  else
+                    case "$ACTION" in
+                      "publish")
+                        echo "Publishing $FILE_PATH to StreamX";
+                        webresourcedata=$(cat "$FILE_PATH" | jq . -sR);
+                        streamx --accept-license publish --ingestion-url=$STREAMX_INGESTION_BASE_URL web-resources "$FILE_PATH" -s "content.bytes=$webresourcedata" -p "sx:type=web-resource/static"
+                        ;;
+                      "unpublish")
+                        echo "Unpublishing $FILE_PATH from StreamX";
+                        streamx unpublish web-resources "$FILE_PATH"
+                        ;;
+                      *)
+                        echo "Only publish / unpublish options are supported."
+                        exit 1
+                        ;;
+                    esac
+                  fi
+                fi
+              done
+            done
+          }
 
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
             CHANGED_FILES=`find * -type f`
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish $PATTERNS;
+              streamx_action $CHANGED_FILES publish;
             fi
           else
             CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish $PATTERNS;
+              streamx_action $CHANGED_FILES publish;
             fi
             REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$REMOVED_FILES" ]; then
-              streamx_action $REMOVED_FILES unpublish $PATTERNS;
+              streamx_action $REMOVED_FILES unpublish;
             fi
           fi
         shell: bash
