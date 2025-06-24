@@ -5,10 +5,17 @@ streamx_action()
   local FILES=$1;
   local ACTION=$2;
   local PATTERNS=$3;
+
+  echo "--------------------------------------"
+  echo "Accepted file patterns:"
+  echo "$PATTERNS"
+  echo "--------------------------------------"
+
   for FILE_PATH in $FILES; do
     echo "--------------------------------------"
     echo "Checking file $FILE_PATH"
     for FILE_PATTERN in $PATTERNS; do
+      echo "for pattern $FILE_PATTERN"
       if [[ "$FILE_PATH" =~ "$FILE_PATTERN" ]]; then
         echo "Accepted file $FILE_PATH - did match the pattern $FILE_PATTERN.";
         if ( $DRY_RUN ); then

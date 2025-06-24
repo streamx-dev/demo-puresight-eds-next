@@ -72,9 +72,6 @@ jobs:
           fi
 
           PATTERNS=`echo "$VARS_STREAMX_INGESTION_WEBRESOURCE_INCLUDES" | jq -r  '.[]'`
-          echo "Accepted file patterns:"
-          echo "$PATTERNS"
-          echo "--------------------------------------"
 
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
             CHANGED_FILES=`find * -type f`
