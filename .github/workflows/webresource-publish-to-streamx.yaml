@@ -17,7 +17,6 @@ on:
 jobs:
   sync-with-streamx:
     if: github.event.pull_request.merged == true || (github.event_name == 'workflow_dispatch' && inputs.publish_all_webresources == true)
-    name: run_on_pr_merged
     runs-on: ubuntu-latest
 
     steps:
