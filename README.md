@@ -144,6 +144,17 @@ This workflow handles publishing of web resources via Helix:
 - [webresource-publish-to-streamx.yaml](.github/workflows/webresource-publish-to-streamx.yaml)
 
 When a pull request is merged into the `main` branch, the web resource synchronization workflow is triggered.
+This workflow handles the publishing and unpublishing of web resources that are part of a merged pull request.
+Only resources that match a configurable pattern are accepted and processed.
+The pattern is defined in the configuration variable STREAMX_INGESTION_WEBRESOURCE_INCLUDES.
+
+In addition triggering this workflow manually we will start full import procedure.
+All files from given branch that pass pattern verification will get published into
+the StreamX platform.
+
+Following variables or secrets need to be configured:
+* STREAMX_INGESTION_BASE_URL (variable)
+* STREAMX_TOKEN (secret)
 
 ### Configuration Requirements
 The workflows require several configuration options, defined as variables and secrets:
@@ -152,10 +163,8 @@ The workflows require several configuration options, defined as variables and se
   e.g.: `https://main--demo-puresight-eds-next--streamx-dev.hlx.live`.
 - Variable `STREAMX_PUBLICACTION_BASE_URL`: a base URL to StreamX publication API,
   e.g.: `https://ingestion.streamx.tech`.
-- Variable `STREAMX_PAGE_PUBLICATION_API`: a URL to StreamX publication API,
-  e.g.: `https://ingestion.streamx.tech/publications/v1/channels/pages/messages`.
 - Variable `STREAMX_INGESTION_WEBRESOURCE_INCLUDES`: a path patterns list of accepted webresources,
-  e.g.: `["scripts/*.js", "styles/*.css"]`.
+  e.g.: `["/blocks/*", "/components/*", "/fonts/*", "/libs/*", "scripts/*.js", "styles/*.css", "/templates/*"]`.
 - Secret `STREAMX_TOKEN`: JWT value required by StreamX publication API.
 
 Workflows can be
