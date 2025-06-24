@@ -75,8 +75,9 @@ jobs:
           echo "--------------------------------------"
 
           streamx_action() {
-            local FILES=$1;
-            local ACTION=$2;
+            local ACTION=$1;
+            shift;
+            local FILES=("$@");
             for FILE_PATH in $FILES; do
               echo "--------------------------------------"
               echo "Checking file $FILE_PATH"
@@ -110,16 +111,16 @@ jobs:
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
             CHANGED_FILES=`find * -type f`
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish;
+              streamx_action publish $CHANGED_FILES;
             fi
           else
             CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish;
+              streamx_action publish $CHANGED_FILES;
             fi
             REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$REMOVED_FILES" ]; then
-              streamx_action $REMOVED_FILES unpublish;
+              streamx_action unpublish $REMOVED_FILES;
             fi
           fi
         shell: bash
