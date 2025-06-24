@@ -44,7 +44,7 @@ jobs:
           STREAMX_INGESTION_AUTH_TOKEN: ${{ secrets.STREAMX_TOKEN }}
           STREAMX_INGESTION_BASE_URL: ${{ vars.STREAMX_INGESTION_BASE_URL }}
         run: |
-          source scripts/streamx.sh
+          source .github/workflows/scripts/streamx.sh
 
           if [ -z "$STREAMX_INGESTION_AUTH_TOKEN" ]; then
             echo "Error: STREAMX_INGESTION_AUTH_TOKEN is not set. Please configure the GitHub secret."
