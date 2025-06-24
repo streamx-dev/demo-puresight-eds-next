@@ -4,6 +4,7 @@ streamx_action()
 {
   local FILES=$1;
   local ACTION=$2;
+  local PATTERNS=$3;
   for FILE_PATH in $FILES; do
     echo "--------------------------------------"
     echo "Checking file $FILE_PATH"

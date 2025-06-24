@@ -79,16 +79,16 @@ jobs:
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
             CHANGED_FILES=`find * -type f`
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish;
+              streamx_action $CHANGED_FILES publish $PATTERNS;
             fi
           else
             CHANGED_FILES=$(git diff --name-only --diff-filter=d HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$CHANGED_FILES" ]; then
-              streamx_action $CHANGED_FILES publish;
+              streamx_action $CHANGED_FILES publish $PATTERNS;
             fi
             REMOVED_FILES=$(git diff --name-only --diff-filter=D HEAD HEAD~${{ github.event.pull_request.commits }});
             if [ -n "$REMOVED_FILES" ]; then
-              streamx_action $REMOVED_FILES unpublish;
+              streamx_action $REMOVED_FILES unpublish $PATTERNS;
             fi
           fi
         shell: bash
