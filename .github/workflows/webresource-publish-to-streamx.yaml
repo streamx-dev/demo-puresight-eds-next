@@ -77,7 +77,7 @@ jobs:
           streamx_action() {
             local ACTION=$1;
             shift;
-            local FILES=("$@");
+            local FILES=$2;
             echo "--------------------------------------";
             echo "action: $ACTION";
             echo "--------------------------------------";
@@ -116,7 +116,7 @@ jobs:
           if [[ ${{ inputs.publish_all_webresources }} == true ]] then
             CHANGED_FILES=();
             find * -type f -print0 | while IFS=  read -r -d $'\0'; do CHANGED_FILES+=("$REPLY"); done; declare -p CHANGED_FILES
-            if [ -n "$CHANGED_FILES" ]; then
+            if (( ${#CHANGED_FILES[@]} )); then
               echo "--------------------------------------";
               echo "CHANGED_FILES: $CHANGED_FILES";
               echo "--------------------------------------";
