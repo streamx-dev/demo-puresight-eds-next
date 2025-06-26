@@ -36,3 +36,5 @@ jobs:
         with:
           action: webresource-publish-all
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          streamx-token: ${{ secrets.STREAMX_TOKEN }}
+          streamx-ingestion-base-url: ${{ vars.STREAMX_INGESTION_BASE_URL }}
