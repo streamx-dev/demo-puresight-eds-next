@@ -34,5 +34,4 @@ jobs:
       - name: Run my action
         uses: rafal-glowacz-ds/streamx-github-action@main
         with:
-          action: webresource-publish-all
           github-token: ${{ secrets.GITHUB_TOKEN }}
