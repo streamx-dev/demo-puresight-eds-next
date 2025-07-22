@@ -137,9 +137,9 @@ These workflows handle publishing and unpublishing pages via Edge Delivery Servi
 When a page is published or unpublished, the corresponding workflow is triggered automatically
 and sends a request to the StreamX instance.
 
-### 2. Helix Workflows
+### 2. Application Workflows
 
-This workflow handles publishing of web resources via Helix:
+This workflow handles publishing of web resources via GitHub repository:
 
 - [webresource-publish-to-streamx.yaml](.github/workflows/webresource-publish-to-streamx.yaml)
 
@@ -147,21 +147,23 @@ When a pull request is merged into the `main` branch, the web resource synchroni
 This workflow handles the publishing and unpublishing of web resources that are part of a merged pull request.
 Only resources that match a configurable pattern are accepted and processed.
 The pattern is defined in the configuration variable STREAMX_INGESTION_WEBRESOURCE_INCLUDES.
+> **Warn:** Pattern list should include ONLY files that are actually a web-resource like css, js
+> or some common img like favicon, but not assets, pages or data.
 
 In addition triggering this workflow manually we will start full import procedure.
 All files from given branch that pass pattern verification will get published into
 the StreamX platform.
 
 Following variables or secrets need to be configured:
-* STREAMX_INGESTION_BASE_URL (variable)
-* STREAMX_TOKEN (secret)
+* STREAMX_INGESTION_URL (variable)
+* STREAMX_INGESTION_TOKEN (secret)
 
 ### Configuration Requirements
 The workflows require several configuration options, defined as variables and secrets:
 
 - Variable `EDS_DOMAIN_URL`: a URL to Edge Delivery Services domain,
   e.g.: `https://main--demo-puresight-eds-next--streamx-dev.hlx.live`.
-- Variable `STREAMX_PUBLICACTION_BASE_URL`: a base URL to StreamX publication API,
+- Variable `STREAMX_INGESTION_URL`: a base URL to StreamX publication API,
   e.g.: `https://ingestion.streamx.tech`.
 - Variable `STREAMX_INGESTION_WEBRESOURCE_INCLUDES`: a path patterns list of accepted webresources,
   e.g.: `["/blocks/*", "/components/*", "/fonts/*", "/libs/*", "scripts/*.js", "styles/*.css", "/templates/*"]`.
