@@ -1,0 +1,32 @@
+name: Publish/Unpublish web resources on StreamX
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_all_webresources:
+        description: "Publish all, pattern included webresources to StreamX"
+        required: false
+        type: boolean
+        default: false
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  sync-with-streamx:
+    if: github.event.pull_request.merged == true || (github.event_name == 'workflow_dispatch' && inputs.publish_all_webresources == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run sync with StreamX
+        uses: streamx-dev/streamx-connector-github@0.0.1
+        with:
+          action: "webresource_${{github.event_name}}"
+          streamx-ingestion-token: ${{ secrets.STREAMX_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
+          streamx-ingestion-webresource-includes: ${{ vars.STREAMX_INGESTION_WEBRESOURCE_INCLUDES }}
