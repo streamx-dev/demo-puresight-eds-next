@@ -15,6 +15,7 @@ import {
 import { loadTemplate } from './commons.js';
 
 const PURESIGHT_DEMO_LOAD_EVENT = 'puresight-demo--loaded';
+
 const loadDependenciesLibs = async () => {
   window.KYANITE_ON_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
   window.KYANITE_ON_DOM_CONTENT_LOAD = PURESIGHT_DEMO_LOAD_EVENT;
