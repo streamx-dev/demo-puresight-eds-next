@@ -33,6 +33,8 @@ jobs:
           eds_page_url="${{ vars.EDS_DOMAIN_URL }}$streamx_key"
           echo "Page URL: $eds_page_url"
           echo "StreamX key: $streamx_key"
+          echo "streamx_key=$(streamx_key)\n" >> $GITHUB_OUTPUT
+          echo "eds_page_url=$(eds_page_url)\n" >> $GITHUB_OUTPUT
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
