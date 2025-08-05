@@ -34,6 +34,14 @@ jobs:
           echo "Page URL: $eds_page_url"
           echo "StreamX key: $streamx_key"
 
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: ${{ secrets.GCP_STREAMX_RELEASES_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_STREAMX_RELEASES_SNAPSHOT_READ_SA }}
+          token_format: access_token
+
       - name: Run publish to StreamX
         uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@main
         with:
