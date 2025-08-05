@@ -29,7 +29,8 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          page_path=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          streamx_key="$page_path.html"
           echo "StreamX key: $streamx_key"
           echo "streamx_key=$streamx_key" >> "$GITHUB_OUTPUT"
 
