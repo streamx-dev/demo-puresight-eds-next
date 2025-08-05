@@ -4,6 +4,11 @@ on:
   repository_dispatch:
     types:
       - resource-unpublished
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   check-event-status:
     runs-on: ubuntu-latest
@@ -19,35 +24,20 @@ jobs:
     if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
     runs-on: ubuntu-latest
     steps:
-      - name: Unpublish from StreamX
+      - name: Prepare ingestion variables
+        id: vars
+        shell: bash
         run: |
           sleep 1s
-          PAGE_PATH=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          streamxApi=${{ vars.STREAMX_PAGE_PUBLICATION_API }}
-          streamxKey="$PAGE_PATH"
-          echo "StreamX URL: $streamxApi key: $streamxKey"
-          streamxResponseCode=$(curl -i -X POST $streamxApi \
-            --write-out %{http_code} \
-            --output streamx_response.txt \
-            -H "Authorization: Bearer ${{ secrets.STREAMX_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-                   \"key\" : \"$streamxKey\",
-                   \"action\" : \"unpublish\",
-                   \"eventTime\" : null,
-                   \"properties\" : { },
-                   \"payload\" : null
-                }")
-          echo -e "StreamX response:\n$(cat streamx_response.txt)"
-          if [ $streamxResponseCode != 202 ]; then
-            echo "Cannot unpublish from StreamX. Status code is: $streamxResponseCode"
-            exit 1
-          fi
-          json_content=$(cat streamx_response.txt)
-          key_value=$(echo "$json_content" | grep -o '"success": *{[^}]*}' | grep -o '"key": *"[^"]*"' | sed 's/"key": *"//;s/"//')
-          if [[ "$key_value" != "$streamxKey" ]]; then
-            echo "Response does not contain success status with expected key"
-            exit 1
-          fi
-        shell: bash
-        
+          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          echo "StreamX key: $streamx_key"
+
+      - name: Run publish to StreamX
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@main
+        with:
+          action: unpublish
+          channel: pages
+          key: ${{ steps.vars.outputs.streamx_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
+          snapshot-artifactory-token: ${{ steps.auth.outputs.access_token }}
