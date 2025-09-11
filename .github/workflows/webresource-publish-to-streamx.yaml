@@ -37,7 +37,7 @@ jobs:
           token_format: access_token
 
       - name: Run sync with StreamX
-        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@main
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         with:
           action: sync
           channel: web-resources
@@ -64,7 +64,7 @@ jobs:
           token_format: access_token
 
       - name: Run full sync with StreamX
-        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@main
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         with:
           action: publish
           channel: web-resources
