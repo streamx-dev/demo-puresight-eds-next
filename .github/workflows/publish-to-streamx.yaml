@@ -33,8 +33,8 @@ jobs:
           page_path=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
           eds_page_url="${{ vars.EDS_DOMAIN_URL }}$page_path"
           echo "Page URL: $eds_page_url"
-          echo "StreamX key: $streamx_key"
-          echo "streamx_key=$streamx_key" >> "$GITHUB_OUTPUT"
+          echo "StreamX key: ${streamx_key}.html"
+          echo "streamx_key=${streamx_key}.html" >> "$GITHUB_OUTPUT"
           echo "eds_page_url=$eds_page_url" >> "$GITHUB_OUTPUT"
 
       - id: 'auth'
@@ -48,7 +48,7 @@ jobs:
       - name: Run publish to StreamX
         uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         env:
-          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000        
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
         with:
           action: publish
           source-provider: ExternalSourceProvider
