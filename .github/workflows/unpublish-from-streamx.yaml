@@ -31,7 +31,9 @@ jobs:
           sleep 1s
           streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
           echo "StreamX key: ${streamx_key}.html"
+          echo "StreamX plain key: $streamx_key.plain.html"
           echo "streamx_key=${streamx_key}.html" >> "$GITHUB_OUTPUT"
+          echo "streamx_plain_key=$streamx_key.plain.html" >> "$GITHUB_OUTPUT"
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
@@ -49,6 +51,17 @@ jobs:
           action: unpublish
           channel: pages
           key: ${{ steps.vars.outputs.streamx_key }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
           snapshot-artifactory-token: ${{ steps.auth.outputs.access_token }}
+
+      - name: Run unpublish plain nav/footer from StreamX
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
+        env:
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+        with:
+          action: unpublish
+          channel: pages
+          key: ${{ steps.vars.outputs.streamx_plain_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
