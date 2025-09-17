@@ -30,7 +30,7 @@ jobs:
         run: |
           sleep 1s
           streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
-          echo "StreamX key: ${streamx_key}.html"
+          echo "StreamX key: ${streamx_key}"
           echo "StreamX plain key: $streamx_key.plain.html"
           echo "streamx_key=${streamx_key}.html" >> "$GITHUB_OUTPUT"
           echo "streamx_plain_key=$streamx_key.plain.html" >> "$GITHUB_OUTPUT"
@@ -43,7 +43,7 @@ jobs:
           service_account: ${{ secrets.GCP_STREAMX_RELEASES_SNAPSHOT_READ_SA }}
           token_format: access_token
 
-      - name: Run publish to StreamX
+      - name: Run unpublish from StreamX
         uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         env:
           STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
