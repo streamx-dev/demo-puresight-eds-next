@@ -54,6 +54,7 @@ jobs:
         uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         env:
           STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+          STREAMX_CONNECTION_TIMEOUT: 30000
         with:
           action: publish
           source-provider: ExternalSourceProvider
@@ -70,6 +71,7 @@ jobs:
         uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
         env:
           STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+          STREAMX_CONNECTION_TIMEOUT: 30000
         with:
           action: publish
           source-provider: ExternalSourceProvider
