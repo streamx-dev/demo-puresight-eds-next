@@ -29,10 +29,10 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')        
           echo "StreamX key: ${streamx_key}"
           echo "StreamX plain key: $streamx_key.plain.html"
-          echo "streamx_key=${streamx_key}.html" >> "$GITHUB_OUTPUT"
+          echo "streamx_key=${streamx_key}" >> "$GITHUB_OUTPUT"
           echo "streamx_plain_key=$streamx_key.plain.html" >> "$GITHUB_OUTPUT"
 
       - id: 'auth'
